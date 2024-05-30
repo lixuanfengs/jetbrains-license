@@ -31,7 +31,7 @@
 
 修改该项目中的常量信息，选择需要激活的软件
 
-![image-20240222155806702](./assets/image-20240222155806702.png)
+![image-20240530180622592](https://lixuanfengs.github.io/blog-images/vp/web/image-20240530180622592.png)
 
 运行主程序生成激活码
 
