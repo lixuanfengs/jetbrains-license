@@ -1,27 +1,161 @@
 package com.cactusli.license.constant;
 
+import java.io.File;
 
+/**
+ * 常量类 - 支持动态配置
+ *
+ * @author CactusLi
+ * @version 2.0.0
+ */
 public class Constant {
-    /**
-     * 证书存放路径
-     */
-    public static final String PATH = "D:\\Personal_projects\\Idea_Activate\\jetbrains-license\\src\\main\\resources\\cert";
-    /**
-     * 证书持有者
-     */
-    public static final String LICENSEE_NAME = "CactusLi";
-    /**
-     * 所有 products的code <a href="https://data.services.jetbrains.com/products?fields=code,name,description"></a>
-     * 和所有付费插件的code
-     * <a href="https://plugins.jetbrains.com/api/searchPlugins?excludeTags=theme&max=500&offset=0&orderBy=downloads&pricingModels=PAID"></a>
-     * <a href="https://plugins.jetbrains.com/api/plugins/{id}"></a>
-     */
-    //public static final String[] DEFAULT_CODES = {"RSCLT", "YTWE", "DG", "PS", "CLN", "RRD", "SPA", "CWMR", "DL", "YTD", "DM", "CWML", "DP", "DS", "QA", "EHS", "MPS", "SPP", "TBA", "RDCPPP", "MF", "QDJVM", "DPCLT", "QDCLD", "QDGO", "US", "QDNET", "RFU", "AC", "IIC", "IIE", "HCC", "JCD", "IDES", "DPPS", "PCC", "RC", "RD", "PCE", "IIU", "RSU", "TCC", "RSCHB", "QDJS", "RM", "DLE", "DMCLP", "PCP", "DPK", "RR", "RS", "FL", "FLIJ", "FLL", "FLS", "MPSIIP", "WRS", "WS", "SP", "GO", "CL", "KT", "QDANDC", "QDJVMC", "DMU", "TC", "GW", "QDPHP", "DCCLT", "QDPYC", "QDPY", "HB", "DC", "PANSIHIGHLIGHT", "PEXTRAICONS", "PLARAVEL", "PDB", "PSPRINGBOOTIDEA", "PMYBATISLOG", "PBASHSUPPORTPRO", "PRNCONSOLE", "PJETFORCER", "PHYBRISCOMMERCE", "PORCHIDE", "PFASTREQUEST", "PFLYINSKYZJBZ", "PREDIS", "PDYNAMODB", "PAEM", "PWIFIADB", "PKSEXPLORER", "PMYBATISHELPER", "PWLANG", "PSWPLUGIN", "PCREVIEW", "PELASTICSEARCH", "PODOO", "PGITLAB", "PFIREHIGHLIGHT", "PGITLABCI", "PYAOQIANGBPMN", "PAEMIDE", "PNGINX", "PIEDIS", "PDBDATABASETOOL", "PJFORMDESIGNER", "PNPMPACKAGEJSON", "POPENAPI", "PREDISMANAGER", "PCMAKEPLUS", "PCODEMRBASE", "PFLUTTER", "PQMLEDITOR", "PUNIAPPSUPPORT", "PSI", "PISCRATCH", "PGITSCOPE", "PVLOG", "PRDFANDSPARQL", "PPUMLSTUDIO", "PQTSQSSEDITOR", "PLEP", "PJDCLEANREAD", "PXSDVISUALIZER", "PBEANCONVERTER", "PNEONPRO", "PAWSLAMBDADEPLR", "PGOLANGCODESUGG", "PJSONNETEMLSUP", "PBREWBUNDLE", "PMATERIALHC", "PPHPCODESUGG", "PCIRCLECI", "PREGEXTOOL", "PSMARTJUMP", "PREDISTOOLS", "PJAVACODESUGG", "PPYCODESUGG", "PMRINTEGEE", "PBRWJV", "PSFCC", "PJSCODESUGG", "POLYBPMNGDNEXT", "PHPEAPLUGIN", "PSVERILOG", "PGITHUBCI", "PPOLARISTOMCATS", "PREDISCLIHELPER", "PBISJ", "PCAICOMMITAPP", "PAICODING", "PMATERIALEXTRAS", "PHEROKU", "PMATERIALLANG", "PRUBYCODESUGG", "PCIINTG", "PAWSQLADVISOR", "PMATERIALCUSTOM", "PTAILWINDTOOLS", "POXYJSONCONVERT", "PQUARKUSHELPER", "PMATERIALFRAME", "PSCIPIO", "PGDOC", "PCDMQTTCLIENT", "PCHATGPTCODING", "PLATTEPRO", "PDBSSH", "PSCREENCODEPRO", "PMINBATIS", "PDATABASE", "PGITLABCICD", "PREDISS", "PEXTENSION", "PKAFKAIDE", "PCAPREDIS", "PFUZYFIPC", "PVCS", "PKAFKA", "PCDAPIRUNNER", "PPOJOTOJSONSCH", "PZKA", "PMONGOEXPERT", "PWXUFQYRHZCRSEO", "PLEDGER", "PBITRISECI", "PNOSQLNAVMDB", "PRANCHER", "PSEQDIAORG", "PTRAVISCI", "PWXUQRYTOXCRSEO", "PWIREMOCHA", "PZEROCODE", "PCAPELASTIC", "PASTOCK", "PSPARQL", "PELSA", "PNETLIFY", "PVERILOGLANGUAG", "PAZD", "PSQLFLUFFLINTER", "POFFICEFLOOR", "POXYJSONSCHGEN", "PFEIGNHELPER", "PNEXTSKETCH", "PNEXTSKETCHTWO", "PWAUFKYVHQCRXEO", "PQUERYFLAG", "PCUEFY", "PPHPHOUDINI", "PAPH", "PGODRUNNER", "PSENTRYINTEG", "PVOQAL", "PSPEECHTOTEXT", "PFIREBASE", "PSRCODEGEN", "PWXUQQYVOXCRSEO", "PAZURECODING", "PIMAGETOVECTOR", "PSOURCESYNCPRO", "PRETROFITASSIT", "PCODEREFACTORAI", "PGPTASSISTANT", "PJQEXPRESS", "PCITRIC", "POXYJSONDIAGRAM", "PSCHEMAREGVIEW", "PLIVESCRIPTINGK", "PNFLUTTER", "PSCIPIOMGNL", "DPN", "PGENSETANDSET", "PDATABASEBUDDY", "PBISAA", "PSCIPIOFTL", "PGOPARSER", "PSWISSKITCONVER", "PMYBATISCODE", "PMICRONAUTLAUNC", "PSOTERISECURITY", "PAUTOLOG"};
-    // public static final String[] DEFAULT_CODES = {"II","PSI","PCWMP"}; // 适用于激活 idea
-    // public static final String[] DEFAULT_CODES = {"WS","PSI","PCWMP"}; // 适用于激活 webstorm
-    // public static final String[] DEFAULT_CODES = {"PC","PSI","PCWMP"}; // 适用于激活 pycharm
 
-    public static final String[] DEFAULT_CODES = {"GO","PSI","PCWMP"}; // 适用于激活 golang
+    // ==================== 默认配置常量 ====================
 
+    /**
+     * 默认证书存放路径
+     */
+    public static final String DEFAULT_PATH = System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "cert";
 
+    /**
+     * 默认证书持有者
+     */
+    public static final String DEFAULT_LICENSEE_NAME = "CactusLi";
+
+    /**
+     * 默认许可证有效期（年）
+     */
+    public static final int DEFAULT_LICENSE_YEARS = 10;
+
+    /**
+     * 默认证书颁发者
+     */
+    public static final String DEFAULT_ISSUER_NAME = "JetProfile CA";
+
+    /**
+     * 默认证书主题
+     */
+    public static final String DEFAULT_SUBJECT_NAME = "Novice-from-2024-01-19";
+
+    // ==================== 产品代码常量 ====================
+
+    /**
+     * 默认产品代码 - IDEA
+     */
+    public static final String[] DEFAULT_CODES = {"II", "PSI", "PCWMP"};
+
+    /**
+     * IDEA 产品代码
+     */
+    public static final String[] IDEA_CODES = {"II", "PSI", "PCWMP"};
+
+    /**
+     * WebStorm 产品代码
+     */
+    public static final String[] WEBSTORM_CODES = {"WS", "PSI", "PCWMP"};
+
+    /**
+     * PyCharm 产品代码
+     */
+    public static final String[] PYCHARM_CODES = {"PC", "PSI", "PCWMP"};
+
+    /**
+     * GoLand 产品代码
+     */
+    public static final String[] GOLAND_CODES = {"GO", "PSI", "PCWMP"};
+
+    /**
+     * CLion 产品代码
+     */
+    public static final String[] CLION_CODES = {"CL", "PSI", "PCWMP"};
+
+    /**
+     * PhpStorm 产品代码
+     */
+    public static final String[] PHPSTORM_CODES = {"PS", "PSI", "PCWMP"};
+
+    /**
+     * Rider 产品代码
+     */
+    public static final String[] RIDER_CODES = {"RD", "PSI", "PCWMP"};
+
+    /**
+     * DataGrip 产品代码
+     */
+    public static final String[] DATAGRIP_CODES = {"DG", "PSI", "PCWMP"};
+
+    /**
+     * RubyMine 产品代码
+     */
+    public static final String[] RUBYMINE_CODES = {"RM", "PSI", "PCWMP"};
+
+    // ==================== 动态配置变量 ====================
+
+    /**
+     * 当前证书存放路径
+     */
+    public static String PATH = DEFAULT_PATH;
+
+    /**
+     * 当前证书持有者
+     */
+    public static String LICENSEE_NAME = DEFAULT_LICENSEE_NAME;
+
+    /**
+     * 当前许可证有效期（年）
+     */
+    public static int LICENSE_YEARS = DEFAULT_LICENSE_YEARS;
+
+    /**
+     * 当前证书颁发者
+     */
+    public static String ISSUER_NAME = DEFAULT_ISSUER_NAME;
+
+    /**
+     * 当前证书主题
+     */
+    public static String SUBJECT_NAME = DEFAULT_SUBJECT_NAME;
+
+    // ==================== 配置更新方法 ====================
+
+    /**
+     * 更新配置
+     */
+    public static void updateConfig(String certPath, String licenseeName, int licenseYears,
+                                   String issuerName, String subjectName) {
+        if (certPath != null && !certPath.trim().isEmpty()) {
+            PATH = certPath;
+        }
+        if (licenseeName != null && !licenseeName.trim().isEmpty()) {
+            LICENSEE_NAME = licenseeName;
+        }
+        if (licenseYears > 0) {
+            LICENSE_YEARS = licenseYears;
+        }
+        if (issuerName != null && !issuerName.trim().isEmpty()) {
+            ISSUER_NAME = issuerName;
+        }
+        if (subjectName != null && !subjectName.trim().isEmpty()) {
+            SUBJECT_NAME = subjectName;
+        }
+    }
+
+    /**
+     * 重置为默认配置
+     */
+    public static void resetToDefaults() {
+        PATH = DEFAULT_PATH;
+        LICENSEE_NAME = DEFAULT_LICENSEE_NAME;
+        LICENSE_YEARS = DEFAULT_LICENSE_YEARS;
+        ISSUER_NAME = DEFAULT_ISSUER_NAME;
+        SUBJECT_NAME = DEFAULT_SUBJECT_NAME;
+    }
+
+    /**
+     * 获取当前配置摘要
+     */
+    public static String getConfigSummary() {
+        return String.format("路径: %s, 持有者: %s, 有效期: %d年, 颁发者: %s, 主题: %s",
+                           PATH, LICENSEE_NAME, LICENSE_YEARS, ISSUER_NAME, SUBJECT_NAME);
+    }
 }

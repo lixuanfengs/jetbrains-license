@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JetBrains License Generator - 首页</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+        }
+        .card {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+        .license-output {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+            margin-top: 3rem;
+            padding: 2rem 0;
+        }
+        .warning-banner {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 0.375rem;
+        }
+        .product-card {
+            transition: transform 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-key me-2"></i>
+                JetBrains License Generator
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">
+                            <i class="fas fa-home me-1"></i>首页
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/config">
+                            <i class="fas fa-cog me-1"></i>配置
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Warning Banner -->
+    <div class="container mt-3">
+        <div class="warning-banner">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            ⚠️ 以下仅供学习交流使用，禁止其它用途！！！ ⚠️
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Flash Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Current Configuration -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-info-circle me-2"></i>
+                            当前配置信息
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>证书持有者:</strong> <span th:text="${config.licenseeName}"></span></p>
+                                <p><strong>产品类型:</strong> <span th:text="${config.productType}"></span></p>
+                                <p><strong>有效期:</strong> <span th:text="${config.licenseYears}"></span> 年</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>证书颁发者:</strong> <span th:text="${config.issuerName}"></span></p>
+                                <p><strong>证书主题:</strong> <span th:text="${config.subjectName}"></span></p>
+                                <p><strong>产品代码:</strong> <span th:text="${#strings.arrayJoin(config.productCodes, ', ')}"></span></p>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <a href="/config" class="btn btn-outline-primary">
+                                <i class="fas fa-edit me-1"></i>修改配置
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Generate -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-magic me-2"></i>
+                            快速生成许可证
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <p class="mb-0">使用当前配置生成许可证</p>
+                            <button type="button" class="btn btn-success" onclick="generateLicense()">
+                                <i class="fas fa-play me-1"></i>生成许可证
+                            </button>
+                        </div>
+                        <div id="licenseResult" style="display: none;">
+                            <hr>
+                            <h6>生成的许可证:</h6>
+                            <div class="license-output" id="licenseOutput"></div>
+                            <div class="text-end mt-2">
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="copyLicense()">
+                                    <i class="fas fa-copy me-1"></i>复制许可证
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Selection -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-th-large me-2"></i>
+                            选择产品生成许可证
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="productCards">
+                            <div class="col-md-4 col-lg-3 mb-3" th:each="product : ${productTypes}">
+                                <div class="card product-card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-laptop-code fa-2x text-primary mb-3"></i>
+                                        <h6 class="card-title" th:text="${product.value}"></h6>
+                                        <button type="button" class="btn btn-primary btn-sm"
+                                                th:data-product-type="${product.key}"
+                                                onclick="generateProductLicense(this.dataset.productType)">
+                                            <i class="fas fa-download me-1"></i>生成
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>JetBrains License Generator v2.0.0</h6>
+                    <p class="text-muted mb-0">基于 Spring Boot 3.x 构建</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-code me-1"></i>
+                        仅供学习交流使用
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+        let currentLicense = '';
+        
+        // 生成许可证
+        function generateLicense() {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>生成中...';
+            button.disabled = true;
+            
+            $.ajax({
+                url: '/generate',
+                type: 'POST',
+                success: function(response) {
+                    if (response.success) {
+                        currentLicense = response.license;
+                        $('#licenseOutput').text(response.license);
+                        $('#licenseResult').show();
+                        showToast(response.message, 'success');
+                    } else {
+                        showToast(response.message, 'error');
+                    }
+                },
+                error: function() {
+                    showToast('请求失败，请稍后重试', 'error');
+                },
+                complete: function() {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            });
+        }
+        
+        // 生成指定产品的许可证
+        function generateProductLicense(productType) {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>生成中...';
+            button.disabled = true;
+            
+            $.ajax({
+                url: '/generate/' + productType,
+                type: 'POST',
+                success: function(response) {
+                    if (response.success) {
+                        currentLicense = response.license;
+                        $('#licenseOutput').text(response.license);
+                        $('#licenseResult').show();
+                        showToast(response.message + ' (' + response.productType + ')', 'success');
+                    } else {
+                        showToast(response.message, 'error');
+                    }
+                },
+                error: function() {
+                    showToast('请求失败，请稍后重试', 'error');
+                },
+                complete: function() {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            });
+        }
+        
+        // 复制许可证
+        function copyLicense() {
+            if (currentLicense) {
+                copyToClipboard(currentLicense);
+            } else {
+                showToast('没有可复制的许可证', 'error');
+            }
+        }
+        
+        // 复制到剪贴板功能
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                showToast('已复制到剪贴板', 'success');
+            }, function(err) {
+                console.error('复制失败: ', err);
+                showToast('复制失败', 'error');
+            });
+        }
+        
+        // 显示提示消息
+        function showToast(message, type = 'info') {
+            const toastHtml = `
+                <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'primary'} border-0" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">${message}</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+            
+            let toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.id = 'toast-container';
+                toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+                document.body.appendChild(toastContainer);
+            }
+            
+            toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+            const toastElement = toastContainer.lastElementChild;
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+            
+            toastElement.addEventListener('hidden.bs.toast', function() {
+                toastElement.remove();
+            });
+        }
+    </script>
+</body>
+</html>

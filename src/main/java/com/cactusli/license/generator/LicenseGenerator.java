@@ -31,14 +31,14 @@ import java.security.cert.X509Certificate;
 @Slf4j
 public class LicenseGenerator {
 
-    public static void generate(String... codes) throws Exception {
+    public static String generate(String... codes) throws Exception {
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
         X509Certificate cert = (X509Certificate) certificateFactory.generateCertificate(Files.newInputStream(Paths.get(String.format("%s/ca.crt", Constant.PATH))));
 
         // 自己修改 license内容
         DateTime endOfToday = DateUtil.endOfDay(DateUtil.date());
-        // 偏移10年
-        DateTime effectiveDate = DateUtil.offset(endOfToday, DateField.YEAR, 10);
+        // 使用动态配置的有效期
+        DateTime effectiveDate = DateUtil.offset(endOfToday, DateField.YEAR, Constant.LICENSE_YEARS);
         codes = ArrayUtil.isEmpty(codes) ? Constant.DEFAULT_CODES : codes;
         String licenseId = RandomUtil.randomString(RandomUtil.BASE_CHAR_NUMBER_LOWER.toUpperCase(), 10);
 
@@ -64,6 +64,8 @@ public class LicenseGenerator {
         log.info("================== Activation code ==================");
         log.info("Activation code: {}", result);
         log.info("================== Activation code ==================");
+
+        return result;
     }
 
     static PrivateKey getPrivateKey() throws Exception {

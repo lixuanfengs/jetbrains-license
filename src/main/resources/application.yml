@@ -1,0 +1,85 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  application:
+    name: jetbrains-license-generator
+  
+  # Thymeleaf 配置
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+    mode: HTML
+    prefix: classpath:/templates/
+    suffix: .html
+    servlet:
+      content-type: text/html
+  
+  # Web 配置
+  web:
+    resources:
+      static-locations: classpath:/static/
+      cache:
+        period: 0
+  
+  # 开发环境配置
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+# JetBrains License 配置
+jetbrains:
+  license:
+    # 证书存放路径（可以通过环境变量或配置文件覆盖）
+    cert-path: ${user.dir}/src/main/resources/cert
+    # 证书持有者名称
+    licensee-name: CactusLi
+    # 许可证有效期（年）
+    license-years: 10
+    # 证书颁发者
+    issuer-name: JetProfile CA
+    # 证书主题
+    subject-name: Novice-from-2024-01-19
+    # 默认产品类型
+    product-type: IDEA
+
+# 日志配置
+logging:
+  level:
+    com.cactusli.license: DEBUG
+    org.springframework.web: info
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/jetbrains-license.log
+
+# 管理端点配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+  info:
+    env:
+      enabled: true
+
+# 应用信息
+info:
+  app:
+    name: JetBrains License Generator
+    version: 2.0.0
+    description: JetBrains License Generator based on Spring Boot 3.x
+    author: CactusLi
+    build-time: '@maven.build.timestamp@'
