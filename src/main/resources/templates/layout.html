@@ -5,99 +5,178 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${title ?: 'JetBrains License Generator'}">JetBrains License Generator</title>
     
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a'
+                        },
+                        success: {
+                            50: '#f0fdf4',
+                            500: '#22c55e',
+                            600: '#16a34a'
+                        },
+                        warning: {
+                            50: '#fffbeb',
+                            500: '#f59e0b',
+                            600: '#d97706'
+                        },
+                        danger: {
+                            50: '#fef2f2',
+                            500: '#ef4444',
+                            600: '#dc2626'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'bounce-in': 'bounceIn 0.6s ease-out'
+                    }
+                }
+            }
+        }
+    </script>
     
     <style>
-        .navbar-brand {
-            font-weight: bold;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .card {
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            border: 1px solid rgba(0, 0, 0, 0.125);
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
         }
-        .btn-group-custom {
-            gap: 0.5rem;
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
         }
-        .license-output {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 0.375rem;
-            padding: 1rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.875rem;
-            word-break: break-all;
-            max-height: 300px;
-            overflow-y: auto;
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .footer {
-            background-color: #f8f9fa;
-            border-top: 1px solid #dee2e6;
-            margin-top: 3rem;
-            padding: 2rem 0;
-        }
-        .warning-banner {
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border-radius: 0.375rem;
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
     </style>
 </head>
-<body>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="fas fa-key me-2"></i>
-                JetBrains License Generator
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/" th:classappend="${#request.requestURI == '/' ? 'active' : ''}">
-                            <i class="fas fa-home me-1"></i>首页
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-3 text-gray-900 hover:text-primary-600 transition-colors duration-200">
+                        <div class="w-8 h-8 bg-gradient-to-r from-primary-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-key text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">JetBrains License Generator</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:block">
+                    <div class="flex items-center space-x-1">
+                        <a href="/"
+                           class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-primary-50 hover:text-primary-600"
+                           th:classappend="${#request.requestURI == '/' ? 'bg-primary-100 text-primary-700' : 'text-gray-600'}">
+                            <i class="fas fa-home mr-2"></i>首页
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/config" th:classappend="${#request.requestURI == '/config' ? 'active' : ''}">
-                            <i class="fas fa-cog me-1"></i>配置
+                        <a href="/config"
+                           class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-primary-50 hover:text-primary-600"
+                           th:classappend="${#request.requestURI == '/config' ? 'bg-primary-100 text-primary-700' : 'text-gray-600'}">
+                            <i class="fas fa-cog mr-2"></i>配置
                         </a>
-                    </li>
-                </ul>
+                        <a href="/vmoptions"
+                           class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-primary-50 hover:text-primary-600"
+                           th:classappend="${#request.requestURI == '/vmoptions' ? 'bg-primary-100 text-primary-700' : 'text-gray-600'}">
+                            <i class="fas fa-tools mr-2"></i>VM配置
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button" class="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200"
+                            onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <div class="px-4 py-2 space-y-1">
+                <a href="/"
+                   class="block px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-primary-50 hover:text-primary-600"
+                   th:classappend="${#request.requestURI == '/' ? 'bg-primary-100 text-primary-700' : 'text-gray-600'}">
+                    <i class="fas fa-home mr-2"></i>首页
+                </a>
+                <a href="/config"
+                   class="block px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-primary-50 hover:text-primary-600"
+                   th:classappend="${#request.requestURI == '/config' ? 'bg-primary-100 text-primary-700' : 'text-gray-600'}">
+                    <i class="fas fa-cog mr-2"></i>配置
+                </a>
+                <a href="/vmoptions"
+                   class="block px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-primary-50 hover:text-primary-600"
+                   th:classappend="${#request.requestURI == '/vmoptions' ? 'bg-primary-100 text-primary-700' : 'text-gray-600'}">
+                    <i class="fas fa-tools mr-2"></i>VM配置
+                </a>
             </div>
         </div>
     </nav>
 
     <!-- Warning Banner -->
-    <div class="container mt-3">
-        <div class="warning-banner">
-            <i class="fas fa-exclamation-triangle me-2"></i>
-            ⚠️ 以下仅供学习交流使用，禁止其它用途！！！ ⚠️
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl p-4 mb-6 shadow-lg animate-fade-in">
+            <div class="flex items-center justify-center space-x-2">
+                <i class="fas fa-exclamation-triangle text-yellow-200"></i>
+                <span class="font-semibold">⚠️ 以下仅供学习交流使用，禁止其它用途！！！ ⚠️</span>
+            </div>
         </div>
     </div>
 
     <!-- Main Content -->
-    <div class="container mt-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
         <!-- Flash Messages -->
-        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
-            <span th:text="${success}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div th:if="${success}" class="bg-success-50 border border-success-200 text-success-800 rounded-xl p-4 mb-6 animate-slide-up">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle text-success-500 mr-3"></i>
+                <span th:text="${success}" class="flex-1"></span>
+                <button type="button" class="ml-4 text-success-600 hover:text-success-800 transition-colors duration-200"
+                        onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
-        
-        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-circle me-2"></i>
-            <span th:text="${error}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+
+        <div th:if="${error}" class="bg-danger-50 border border-danger-200 text-danger-800 rounded-xl p-4 mb-6 animate-slide-up">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle text-danger-500 mr-3"></i>
+                <span th:text="${error}" class="flex-1"></span>
+                <button type="button" class="ml-4 text-danger-600 hover:text-danger-800 transition-colors duration-200"
+                        onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
 
         <!-- Page Content -->
@@ -105,30 +184,42 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h6>JetBrains License Generator v2.0.0</h6>
-                    <p class="text-muted mb-0">基于 Spring Boot 3.x 构建</p>
+    <footer class="bg-white/80 backdrop-blur-md border-t border-gray-200/50 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="text-center md:text-left">
+                    <h6 class="text-lg font-bold gradient-text mb-1">JetBrains License Generator v2.0.0</h6>
+                    <p class="text-gray-600 text-sm">基于 Spring Boot 3.x 构建，使用 Tailwind CSS 优化</p>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <p class="text-muted mb-0">
-                        <i class="fas fa-code me-1"></i>
+                <div class="text-center md:text-right">
+                    <p class="text-gray-600 text-sm flex items-center justify-center md:justify-end">
+                        <i class="fas fa-code mr-2 text-primary-500"></i>
                         仅供学习交流使用
                     </p>
+                    <div class="flex items-center justify-center md:justify-end space-x-4 mt-2">
+                        <span class="text-xs text-gray-500">Powered by</span>
+                        <div class="flex items-center space-x-2">
+                            <i class="fab fa-java text-orange-500"></i>
+                            <i class="fas fa-leaf text-green-500"></i>
+                            <span class="text-xs text-gray-600">Spring Boot</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
     <!-- Custom Scripts -->
     <script th:inline="javascript">
+        // 移动端菜单切换
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
         // 复制到剪贴板功能
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(function() {
@@ -138,30 +229,55 @@
                 showToast('复制失败', 'error');
             });
         }
-        
-        // 显示提示消息
+
+        // 显示现代化提示消息
         function showToast(message, type = 'info') {
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-blue-500'
+            };
+
+            const icons = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                warning: 'fas fa-exclamation-triangle',
+                info: 'fas fa-info-circle'
+            };
+
             const toastHtml = `
-                <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'primary'} border-0" role="alert">
-                    <div class="d-flex">
-                        <div class="toast-body">${message}</div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                <div class="toast-notification ${colors[type] || colors.info} text-white rounded-lg shadow-lg p-4 mb-3 animate-slide-up">
+                    <div class="flex items-center">
+                        <i class="${icons[type] || icons.info} mr-3"></i>
+                        <span class="flex-1">${message}</span>
+                        <button type="button" class="ml-3 text-white hover:text-gray-200 transition-colors duration-200"
+                                onclick="this.parentElement.parentElement.remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 </div>
             `;
-            
+
             let toastContainer = document.getElementById('toast-container');
             if (!toastContainer) {
                 toastContainer = document.createElement('div');
                 toastContainer.id = 'toast-container';
-                toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+                toastContainer.className = 'fixed bottom-4 right-4 z-50 max-w-sm';
                 document.body.appendChild(toastContainer);
             }
-            
+
             toastContainer.insertAdjacentHTML('beforeend', toastHtml);
-            const toastElement = toastContainer.lastElementChild;
-            const toast = new bootstrap.Toast(toastElement);
-            toast.show();
+
+            // 自动移除提示
+            setTimeout(() => {
+                const toastElement = toastContainer.lastElementChild;
+                if (toastElement) {
+                    toastElement.style.opacity = '0';
+                    toastElement.style.transform = 'translateX(100%)';
+                    setTimeout(() => toastElement.remove(), 300);
+                }
+            }, 3000);
             
             toastElement.addEventListener('hidden.bs.toast', function() {
                 toastElement.remove();

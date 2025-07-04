@@ -23,7 +23,7 @@ import java.util.Map;
 
 /**
  * 许可证Web控制器
- * 
+ *
  * @author CactusLi
  * @version 2.0.0
  */
@@ -31,10 +31,10 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 public class LicenseController {
-    
+
     private final LicenseService licenseService;
     private final VmOptionsService vmOptionsService;
-    
+
     /**
      * 首页
      */
@@ -53,7 +53,7 @@ public class LicenseController {
             return "index";
         }
     }
-    
+
     /**
      * 配置页面
      */
@@ -63,20 +63,20 @@ public class LicenseController {
         model.addAttribute("productTypes", getProductTypes());
         return "config";
     }
-    
+
     /**
      * 更新配置
      */
     @PostMapping("/config")
-    public String updateConfig(@Valid @ModelAttribute("config") LicenseConfig config, 
-                              BindingResult result, 
+    public String updateConfig(@Valid @ModelAttribute("config") LicenseConfig config,
+                              BindingResult result,
                               RedirectAttributes redirectAttributes,
                               Model model) {
         if (result.hasErrors()) {
             model.addAttribute("productTypes", getProductTypes());
             return "config";
         }
-        
+
         try {
             licenseService.updateConfig(config);
             redirectAttributes.addFlashAttribute("success", "配置更新成功！");
@@ -88,7 +88,7 @@ public class LicenseController {
             return "config";
         }
     }
-    
+
     /**
      * 生成许可证
      */
@@ -108,7 +108,7 @@ public class LicenseController {
         }
         return result;
     }
-    
+
     /**
      * 生成指定产品的许可证
      */
@@ -130,7 +130,7 @@ public class LicenseController {
         }
         return result;
     }
-    
+
     /**
      * 重置配置
      */
@@ -145,7 +145,7 @@ public class LicenseController {
         }
         return "redirect:/config";
     }
-    
+
     /**
      * 获取当前配置信息
      */
@@ -154,7 +154,7 @@ public class LicenseController {
     public LicenseConfig getCurrentConfig() {
         return licenseService.getCurrentConfig();
     }
-    
+
     /**
      * 获取产品类型映射
      */
@@ -171,7 +171,7 @@ public class LicenseController {
         productTypes.put("RUBYMINE", "RubyMine");
         return productTypes;
     }
-    
+
     /**
      * 根据产品类型获取产品代码
      */
@@ -280,18 +280,18 @@ public class LicenseController {
         return result;
     }
 
+
     /**
-     * 根据文件名搜索真实的文件路径
+     * 根据文件名搜索真实的文件路径（仅支持jar文件）
      */
     @PostMapping("/api/vmoptions/resolve-path")
     @ResponseBody
     public Map<String, Object> resolveFilePath(@RequestBody Map<String, String> request) {
         try {
             String fileName = request.get("fileName");
-            String fileType = request.get("fileType"); // "jar" 或 "vmoptions"
-            String productKey = request.get("productKey"); // 仅对vmoptions文件需要
+            String fileType = request.get("fileType"); // 只支持 "jar"
 
-            log.info("解析文件路径: fileName={}, fileType={}, productKey={}", fileName, fileType, productKey);
+            log.info("解析文件路径: fileName={}, fileType={}", fileName, fileType);
 
             Map<String, Object> result = new HashMap<>();
             List<String> possiblePaths = new ArrayList<>();
@@ -299,8 +299,10 @@ public class LicenseController {
 
             if ("jar".equals(fileType)) {
                 possiblePaths = findJarFilePaths(fileName);
-            } else if ("vmoptions".equals(fileType)) {
-                possiblePaths = findVmOptionsFilePaths(fileName, productKey);
+            } else {
+                result.put("success", false);
+                result.put("message", "不支持的文件类型: " + fileType);
+                return result;
             }
 
             // 查找第一个存在的路径
@@ -357,46 +359,5 @@ public class LicenseController {
         return paths;
     }
 
-    /**
-     * 查找vmoptions文件的可能路径
-     */
-    private List<String> findVmOptionsFilePaths(String fileName, String productKey) {
-        List<String> paths = new ArrayList<>();
-        String userHome = System.getProperty("user.home");
-        String productUpper = productKey != null ? productKey.toUpperCase() : "";
 
-        // JetBrains配置目录 (Windows)
-        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-            String appData = System.getenv("APPDATA");
-            if (appData != null) {
-                // 不同版本的配置目录
-                String[] versions = {"2023.3", "2023.2", "2023.1", "2024.1", "2024.2"};
-                for (String version : versions) {
-                    paths.add(appData + "\\JetBrains\\" + productUpper + version + "\\" + fileName);
-                }
-            }
-
-            // 程序安装目录
-            String[] installDirs = {
-                "C:\\Program Files\\JetBrains",
-                "C:\\Program Files (x86)\\JetBrains",
-                "D:\\Program Files\\JetBrains"
-            };
-
-            for (String installDir : installDirs) {
-                paths.add(installDir + "\\" + productUpper + "\\bin\\" + productKey + "64.exe.vmoptions");
-                paths.add(installDir + "\\" + productUpper + " 2023.3\\bin\\" + productKey + "64.exe.vmoptions");
-            }
-        }
-
-        // Linux/Mac配置目录
-        paths.add(userHome + "/.config/JetBrains/" + productUpper + "2023.3/" + fileName);
-        paths.add(userHome + "/Library/Application Support/JetBrains/" + productUpper + "2023.3/" + fileName);
-
-        // 当前目录
-        paths.add(System.getProperty("user.dir") + "/" + fileName);
-        paths.add(System.getProperty("user.dir") + "\\" + fileName);
-
-        return paths;
-    }
 }

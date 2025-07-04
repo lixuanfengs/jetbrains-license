@@ -4,285 +4,381 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JetBrains License Generator - 配置</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a'
+                        },
+                        success: {
+                            50: '#f0fdf4',
+                            500: '#22c55e',
+                            600: '#16a34a'
+                        },
+                        warning: {
+                            50: '#fffbeb',
+                            500: '#f59e0b',
+                            600: '#d97706'
+                        },
+                        danger: {
+                            50: '#fef2f2',
+                            500: '#ef4444',
+                            600: '#dc2626'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'bounce-in': 'bounceIn 0.6s ease-out'
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        .navbar-brand {
-            font-weight: bold;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .card {
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            border: 1px solid rgba(0, 0, 0, 0.125);
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
         }
-        .footer {
-            background-color: #f8f9fa;
-            border-top: 1px solid #dee2e6;
-            margin-top: 3rem;
-            padding: 2rem 0;
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
         }
-        .warning-banner {
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border-radius: 0.375rem;
-        }
-        .form-label {
-            font-weight: 600;
-        }
-        .is-invalid {
-            border-color: #dc3545;
-        }
-        .invalid-feedback {
-            display: block;
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
     </style>
 </head>
-<body>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="fas fa-key me-2"></i>
-                JetBrains License Generator
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">
-                            <i class="fas fa-home me-1"></i>首页
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-3 text-gray-900 hover:text-primary-600 transition-colors duration-200">
+                        <div class="w-8 h-8 bg-gradient-to-r from-primary-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-key text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">JetBrains License Generator</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:block">
+                    <div class="flex items-center space-x-1">
+                        <a href="/" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-primary-50 hover:text-primary-600 text-gray-600">
+                            <i class="fas fa-home mr-2"></i>首页
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/config">
-                            <i class="fas fa-cog me-1"></i>配置
+                        <a href="/config" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-primary-100 text-primary-700">
+                            <i class="fas fa-cog mr-2"></i>配置
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/vmoptions">
-                            <i class="fas fa-tools me-1"></i>VM选项
+                        <a href="/vmoptions" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-primary-50 hover:text-primary-600 text-gray-600">
+                            <i class="fas fa-tools mr-2"></i>VM配置
                         </a>
-                    </li>
-                </ul>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button" class="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200"
+                            onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <div class="px-4 py-2 space-y-1">
+                <a href="/" class="block px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-primary-50 hover:text-primary-600 text-gray-600">
+                    <i class="fas fa-home mr-2"></i>首页
+                </a>
+                <a href="/config" class="block px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-primary-100 text-primary-700">
+                    <i class="fas fa-cog mr-2"></i>配置
+                </a>
+                <a href="/vmoptions" class="block px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-primary-50 hover:text-primary-600 text-gray-600">
+                    <i class="fas fa-tools mr-2"></i>VM配置
+                </a>
             </div>
         </div>
     </nav>
 
     <!-- Warning Banner -->
-    <div class="container mt-3">
-        <div class="warning-banner">
-            <i class="fas fa-exclamation-triangle me-2"></i>
-            ⚠️ 以下仅供学习交流使用，禁止其它用途！！！ ⚠️
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl p-4 mb-6 shadow-lg animate-fade-in">
+            <div class="flex items-center justify-center space-x-2">
+                <i class="fas fa-exclamation-triangle text-yellow-200"></i>
+                <span class="font-semibold">⚠️ 以下仅供学习交流使用，禁止其它用途！！！ ⚠️</span>
+            </div>
         </div>
     </div>
 
     <!-- Main Content -->
-    <div class="container mt-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
         <!-- Flash Messages -->
-        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
-            <span th:text="${success}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div th:if="${success}" class="bg-success-50 border border-success-200 text-success-800 rounded-xl p-4 mb-6 animate-slide-up">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle text-success-500 mr-3"></i>
+                <span th:text="${success}" class="flex-1"></span>
+                <button type="button" class="ml-4 text-success-600 hover:text-success-800 transition-colors duration-200"
+                        onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
-        
-        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-circle me-2"></i>
-            <span th:text="${error}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+
+        <div th:if="${error}" class="bg-danger-50 border border-danger-200 text-danger-800 rounded-xl p-4 mb-6 animate-slide-up">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle text-danger-500 mr-3"></i>
+                <span th:text="${error}" class="flex-1"></span>
+                <button type="button" class="ml-4 text-danger-600 hover:text-danger-800 transition-colors duration-200"
+                        onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Page Title -->
+        <div class="text-center mb-12 animate-fade-in">
+            <h1 class="text-4xl font-bold gradient-text mb-4">
+                <i class="fas fa-cog mr-3"></i>许可证配置
+            </h1>
+            <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                自定义许可证生成参数，配置证书信息和产品类型
+            </p>
         </div>
 
         <!-- Configuration Form -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">
-                            <i class="fas fa-cog me-2"></i>
-                            许可证配置
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <form th:action="@{/config}" th:object="${config}" method="post">
-                            <div class="row">
-                                <!-- 基本信息 -->
-                                <div class="col-md-6">
-                                    <h6 class="text-primary mb-3">
-                                        <i class="fas fa-user me-1"></i>基本信息
-                                    </h6>
-                                    
-                                    <div class="mb-3">
-                                        <label for="licenseeName" class="form-label">证书持有者名称</label>
-                                        <input type="text" 
-                                               class="form-control" 
-                                               th:class="${#fields.hasErrors('licenseeName')} ? 'form-control is-invalid' : 'form-control'"
-                                               id="licenseeName" 
-                                               th:field="*{licenseeName}" 
-                                               placeholder="请输入证书持有者名称">
-                                        <div th:if="${#fields.hasErrors('licenseeName')}" 
-                                             class="invalid-feedback" 
+        <div class="animate-fade-in">
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="bg-gradient-to-r from-primary-500 to-purple-600 px-6 py-4">
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <i class="fas fa-cog mr-3"></i>
+                        许可证配置
+                    </h2>
+                </div>
+                <div class="p-8">
+                    <form th:action="@{/config}" th:object="${config}" method="post" class="space-y-8">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <!-- 基本信息 -->
+                            <div class="space-y-6">
+                                <h3 class="text-xl font-bold text-gray-900 flex items-center">
+                                    <div class="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center mr-3">
+                                        <i class="fas fa-user text-primary-600"></i>
+                                    </div>
+                                    基本信息
+                                </h3>
+
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="licenseeName" class="block text-sm font-semibold text-gray-700 mb-2">证书持有者名称</label>
+                                        <input type="text"
+                                               id="licenseeName"
+                                               th:field="*{licenseeName}"
+                                               placeholder="请输入证书持有者名称"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                                               th:classappend="${#fields.hasErrors('licenseeName')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''">
+                                        <div th:if="${#fields.hasErrors('licenseeName')}"
+                                             class="mt-2 text-sm text-red-600"
                                              th:errors="*{licenseeName}"></div>
                                     </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="licenseYears" class="form-label">许可证有效期（年）</label>
-                                        <input type="number" 
-                                               class="form-control" 
-                                               th:class="${#fields.hasErrors('licenseYears')} ? 'form-control is-invalid' : 'form-control'"
-                                               id="licenseYears" 
-                                               th:field="*{licenseYears}" 
-                                               min="1" 
+
+                                    <div>
+                                        <label for="licenseYears" class="block text-sm font-semibold text-gray-700 mb-2">许可证有效期（年）</label>
+                                        <input type="number"
+                                               id="licenseYears"
+                                               th:field="*{licenseYears}"
+                                               min="1"
                                                max="50"
-                                               placeholder="请输入有效期年数">
-                                        <div th:if="${#fields.hasErrors('licenseYears')}" 
-                                             class="invalid-feedback" 
+                                               placeholder="请输入有效期年数"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                                               th:classappend="${#fields.hasErrors('licenseYears')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''">
+                                        <div th:if="${#fields.hasErrors('licenseYears')}"
+                                             class="mt-2 text-sm text-red-600"
                                              th:errors="*{licenseYears}"></div>
                                     </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="productType" class="form-label">产品类型</label>
-                                        <select class="form-select" 
-                                                th:class="${#fields.hasErrors('productType')} ? 'form-select is-invalid' : 'form-select'"
-                                                id="productType" 
+
+                                    <div>
+                                        <label for="productType" class="block text-sm font-semibold text-gray-700 mb-2">产品类型</label>
+                                        <select id="productType"
                                                 th:field="*{productType}"
-                                                onchange="updateProductCodes()">
+                                                onchange="updateProductCodes()"
+                                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200 bg-white"
+                                                th:classappend="${#fields.hasErrors('productType')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''">
                                             <option value="">请选择产品类型</option>
-                                            <option th:each="product : ${productTypes}" 
-                                                    th:value="${product.key}" 
+                                            <option th:each="product : ${productTypes}"
+                                                    th:value="${product.key}"
                                                     th:text="${product.value}"></option>
                                         </select>
-                                        <div th:if="${#fields.hasErrors('productType')}" 
-                                             class="invalid-feedback" 
+                                        <div th:if="${#fields.hasErrors('productType')}"
+                                             class="mt-2 text-sm text-red-600"
                                              th:errors="*{productType}"></div>
                                     </div>
                                 </div>
-                                
-                                <!-- 证书信息 -->
-                                <div class="col-md-6">
-                                    <h6 class="text-primary mb-3">
-                                        <i class="fas fa-certificate me-1"></i>证书信息
-                                    </h6>
-                                    
-                                    <div class="mb-3">
-                                        <label for="issuerName" class="form-label">证书颁发者</label>
-                                        <input type="text" 
-                                               class="form-control" 
-                                               th:class="${#fields.hasErrors('issuerName')} ? 'form-control is-invalid' : 'form-control'"
-                                               id="issuerName" 
-                                               th:field="*{issuerName}" 
-                                               placeholder="请输入证书颁发者">
-                                        <div th:if="${#fields.hasErrors('issuerName')}" 
-                                             class="invalid-feedback" 
+                            </div>
+
+                            <!-- 证书信息 -->
+                            <div class="space-y-6">
+                                <h3 class="text-xl font-bold text-gray-900 flex items-center">
+                                    <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                                        <i class="fas fa-certificate text-green-600"></i>
+                                    </div>
+                                    证书信息
+                                </h3>
+
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="issuerName" class="block text-sm font-semibold text-gray-700 mb-2">证书颁发者</label>
+                                        <input type="text"
+                                               id="issuerName"
+                                               th:field="*{issuerName}"
+                                               placeholder="请输入证书颁发者"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                                               th:classappend="${#fields.hasErrors('issuerName')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''">
+                                        <div th:if="${#fields.hasErrors('issuerName')}"
+                                             class="mt-2 text-sm text-red-600"
                                              th:errors="*{issuerName}"></div>
                                     </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="subjectName" class="form-label">证书主题</label>
-                                        <input type="text" 
-                                               class="form-control" 
-                                               th:class="${#fields.hasErrors('subjectName')} ? 'form-control is-invalid' : 'form-control'"
-                                               id="subjectName" 
-                                               th:field="*{subjectName}" 
-                                               placeholder="请输入证书主题">
-                                        <div th:if="${#fields.hasErrors('subjectName')}" 
-                                             class="invalid-feedback" 
+
+                                    <div>
+                                        <label for="subjectName" class="block text-sm font-semibold text-gray-700 mb-2">证书主题</label>
+                                        <input type="text"
+                                               id="subjectName"
+                                               th:field="*{subjectName}"
+                                               placeholder="请输入证书主题"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                                               th:classappend="${#fields.hasErrors('subjectName')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''">
+                                        <div th:if="${#fields.hasErrors('subjectName')}"
+                                             class="mt-2 text-sm text-red-600"
                                              th:errors="*{subjectName}"></div>
                                     </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="certPath" class="form-label">证书存放路径</label>
-                                        <input type="text" 
-                                               class="form-control" 
-                                               th:class="${#fields.hasErrors('certPath')} ? 'form-control is-invalid' : 'form-control'"
-                                               id="certPath" 
-                                               th:field="*{certPath}" 
-                                               placeholder="请输入证书存放路径">
-                                        <div th:if="${#fields.hasErrors('certPath')}" 
-                                             class="invalid-feedback" 
+
+                                    <div>
+                                        <label for="certPath" class="block text-sm font-semibold text-gray-700 mb-2">证书存放路径</label>
+                                        <input type="text"
+                                               id="certPath"
+                                               th:field="*{certPath}"
+                                               placeholder="请输入证书存放路径"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                                               th:classappend="${#fields.hasErrors('certPath')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''">
+                                        <div th:if="${#fields.hasErrors('certPath')}"
+                                             class="mt-2 text-sm text-red-600"
                                              th:errors="*{certPath}"></div>
-                                        <div class="form-text">证书文件将保存在此目录下</div>
+                                        <p class="mt-2 text-sm text-gray-500">证书文件将保存在此目录下</p>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- 产品代码显示 -->
-                            <div class="row mt-3">
-                                <div class="col-12">
-                                    <h6 class="text-primary mb-3">
-                                        <i class="fas fa-code me-1"></i>产品代码
-                                    </h6>
-                                    <div class="alert alert-info">
-                                        <strong>当前产品代码:</strong> 
-                                        <span id="currentProductCodes" th:text="${#strings.arrayJoin(config.productCodes, ', ')}"></span>
+                        </div>
+
+                        <!-- 产品代码显示 -->
+                        <div class="mt-8">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                                <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-code text-blue-600"></i>
+                                </div>
+                                产品代码
+                            </h3>
+                            <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                                <div class="flex items-center">
+                                    <i class="fas fa-info-circle text-blue-500 mr-3"></i>
+                                    <div>
+                                        <span class="font-semibold text-blue-800">当前产品代码:</span>
+                                        <span id="currentProductCodes" class="text-blue-700 ml-2" th:text="${#strings.arrayJoin(config.productCodes, ', ')}"></span>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- 操作按钮 -->
-                            <div class="row mt-4">
-                                <div class="col-12">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <button type="submit" class="btn btn-primary me-2">
-                                                <i class="fas fa-save me-1"></i>保存配置
-                                            </button>
-                                            <a href="/" class="btn btn-secondary">
-                                                <i class="fas fa-arrow-left me-1"></i>返回首页
-                                            </a>
-                                        </div>
-                                        <div>
-                                            <button type="button" class="btn btn-outline-warning" onclick="resetForm()">
-                                                <i class="fas fa-undo me-1"></i>重置表单
-                                            </button>
-                                            <form th:action="@{/reset}" method="post" style="display: inline;">
-                                                <button type="submit" class="btn btn-outline-danger ms-2" 
-                                                        onclick="return confirm('确定要重置为默认配置吗？')">
-                                                    <i class="fas fa-refresh me-1"></i>恢复默认
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+
+                        <!-- 操作按钮 -->
+                        <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8 pt-8 border-t border-gray-200">
+                            <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                                <button type="submit" class="px-8 py-3 bg-gradient-to-r from-primary-500 to-purple-600 hover:from-primary-600 hover:to-purple-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                                    <i class="fas fa-save mr-2"></i>保存配置
+                                </button>
+                                <a href="/" class="px-8 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-all duration-200 hover:scale-105 shadow-lg text-center">
+                                    <i class="fas fa-arrow-left mr-2"></i>返回首页
+                                </a>
                             </div>
-                        </form>
-                    </div>
+                            <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                                <button type="button" onclick="resetForm()" class="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-medium rounded-lg transition-all duration-200 hover:scale-105 shadow-lg">
+                                    <i class="fas fa-undo mr-2"></i>重置表单
+                                </button>
+                                <form th:action="@{/reset}" method="post" class="inline">
+                                    <button type="submit" onclick="return confirm('确定要重置为默认配置吗？')"
+                                            class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-all duration-200 hover:scale-105 shadow-lg">
+                                        <i class="fas fa-refresh mr-2"></i>恢复默认
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h6>JetBrains License Generator v2.0.0</h6>
-                    <p class="text-muted mb-0">基于 Spring Boot 3.x 构建</p>
+    <footer class="bg-white/80 backdrop-blur-md border-t border-gray-200/50 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="text-center md:text-left">
+                    <h6 class="text-lg font-bold gradient-text mb-1">JetBrains License Generator v2.0.0</h6>
+                    <p class="text-gray-600 text-sm">基于 Spring Boot 3.x 构建，使用 Tailwind CSS 优化</p>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <p class="text-muted mb-0">
-                        <i class="fas fa-code me-1"></i>
+                <div class="text-center md:text-right">
+                    <p class="text-gray-600 text-sm flex items-center justify-center md:justify-end">
+                        <i class="fas fa-code mr-2 text-primary-500"></i>
                         仅供学习交流使用
                     </p>
+                    <div class="flex items-center justify-center md:justify-end space-x-4 mt-2">
+                        <span class="text-xs text-gray-500">Powered by</span>
+                        <div class="flex items-center space-x-2">
+                            <i class="fab fa-java text-orange-500"></i>
+                            <i class="fas fa-leaf text-green-500"></i>
+                            <span class="text-xs text-gray-600">Spring Boot</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
     <script>
+        // 移动端菜单切换
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu) {
+                mobileMenu.classList.toggle('hidden');
+            }
+        }
+
         // 产品代码映射
         const productCodeMap = {
             'IDEA': ['II', 'PSI', 'PCWMP'],
@@ -295,19 +391,19 @@
             'DATAGRIP': ['DG', 'PSI', 'PCWMP'],
             'RUBYMINE': ['RM', 'PSI', 'PCWMP']
         };
-        
+
         // 更新产品代码显示
         function updateProductCodes() {
             const productType = document.getElementById('productType').value;
             const codesElement = document.getElementById('currentProductCodes');
-            
+
             if (productType && productCodeMap[productType]) {
                 codesElement.textContent = productCodeMap[productType].join(', ');
             } else {
                 codesElement.textContent = 'II, PSI, PCWMP';
             }
         }
-        
+
         // 重置表单
         function resetForm() {
             if (confirm('确定要重置表单吗？')) {
@@ -315,7 +411,7 @@
                 updateProductCodes();
             }
         }
-        
+
         // 页面加载时更新产品代码
         document.addEventListener('DOMContentLoaded', function() {
             updateProductCodes();
