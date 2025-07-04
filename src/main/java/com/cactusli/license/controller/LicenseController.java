@@ -3,12 +3,14 @@ package com.cactusli.license.controller;
 import com.cactusli.license.config.LicenseConfig;
 import com.cactusli.license.constant.Constant;
 import com.cactusli.license.service.LicenseService;
+import com.cactusli.license.service.VmOptionsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
@@ -27,6 +29,7 @@ import java.util.Map;
 public class LicenseController {
     
     private final LicenseService licenseService;
+    private final VmOptionsService vmOptionsService;
     
     /**
      * 首页
@@ -182,5 +185,55 @@ public class LicenseController {
             default:
                 return Constant.DEFAULT_CODES;
         }
+    }
+
+    // ==================== VM选项配置相关端点 ====================
+
+    /**
+     * VM选项配置页面
+     */
+    @GetMapping("/vmoptions")
+    public String vmOptionsPage(Model model) {
+        model.addAttribute("supportedProducts", vmOptionsService.getSupportedProducts());
+        model.addAttribute("jaNetfilterInfo", vmOptionsService.getJaNetfilterInfo());
+        model.addAttribute("isJaNetfilterAvailable", vmOptionsService.isJaNetfilterAvailable());
+        return "vmoptions";
+    }
+
+    /**
+     * 配置所有产品的VM选项
+     */
+    @PostMapping("/api/vmoptions/configure-all")
+    @ResponseBody
+    public Map<String, Object> configureAllVmOptions() {
+        log.info("开始配置所有产品的VM选项");
+        return vmOptionsService.configureAllProducts();
+    }
+
+    /**
+     * 获取支持的产品列表
+     */
+    @GetMapping("/api/vmoptions/products")
+    @ResponseBody
+    public Map<String, Object> getSupportedProducts() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        result.put("products", vmOptionsService.getSupportedProducts());
+        result.put("jaNetfilterInfo", vmOptionsService.getJaNetfilterInfo());
+        return result;
+    }
+
+    /**
+     * 检查ja-netfilter.jar状态
+     */
+    @GetMapping("/api/vmoptions/status")
+    @ResponseBody
+    public Map<String, Object> getVmOptionsStatus() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        result.put("jaNetfilterAvailable", vmOptionsService.isJaNetfilterAvailable());
+        result.put("jaNetfilterInfo", vmOptionsService.getJaNetfilterInfo());
+        result.put("supportedProductsCount", vmOptionsService.getSupportedProducts().size());
+        return result;
     }
 }
