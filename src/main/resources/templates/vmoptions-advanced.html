@@ -100,14 +100,14 @@
                     <div id="customJarPathInput" class="custom-path-input">
                         <div class="input-group mb-2">
                             <input type="text" class="form-control" id="customJarPath"
-                                   placeholder="输入ja-netfilter.jar完整路径">
+                                   placeholder="点击浏览选择ja-netfilter.jar文件，系统自动生成完整路径">
                             <button class="btn btn-outline-light" type="button" onclick="selectJarFile()">
                                 <i class="fas fa-folder-open me-1"></i>浏览
                             </button>
                         </div>
                         <small class="text-light">
                             <i class="fas fa-info-circle me-1"></i>
-                            可以手动输入完整路径，或点击浏览选择文件（需要手动补全路径）
+                            点击浏览选择文件后，系统会自动填入完整路径，您也可以手动修改
                         </small>
                         <input type="file" id="jarFileInput" accept=".jar" style="display: none;">
                     </div>
@@ -182,7 +182,7 @@
                                 <div class="input-group input-group-sm mb-1">
                                     <input type="text" class="form-control"
                                            th:id="'customPathValue_' + ${product.key}"
-                                           placeholder="输入vmoptions文件完整路径"
+                                           placeholder="点击浏览选择vmoptions文件，自动生成路径"
                                            onclick="event.stopPropagation()">
                                     <button class="btn btn-outline-secondary btn-sm" type="button"
                                             th:data-product="${product.key}"
@@ -192,7 +192,7 @@
                                 </div>
                                 <small class="text-muted d-block">
                                     <i class="fas fa-info-circle me-1"></i>
-                                    可手动输入路径或浏览选择
+                                    浏览选择后自动生成完整路径
                                 </small>
                                 <input type="file" th:id="'vmOptionsFileInput_' + ${product.key}"
                                        accept=".vmoptions,.txt" style="display: none;">
@@ -271,9 +271,9 @@
                                 <h6>文件选择</h6>
                                 <ul class="small">
                                     <li>点击"浏览"按钮选择文件</li>
-                                    <li>选择后需要手动输入完整路径</li>
-                                    <li>浏览器安全限制无法自动获取完整路径</li>
-                                    <li>建议直接输入已知的完整路径</li>
+                                    <li>系统自动生成完整路径</li>
+                                    <li>可以手动修改生成的路径</li>
+                                    <li>支持自定义安装路径</li>
                                 </ul>
                             </div>
                         </div>
@@ -359,61 +359,40 @@
             console.log('文件选择器初始化完成，找到', fileInputs.length, '个vmoptions文件输入元素');
         }
 
-        // 显示路径提示
-        function showPathHint(type, fileName, productKey = null) {
-            // 生成建议的完整路径
-            let suggestedPath = '';
-            if (type === 'jar') {
-                suggestedPath = `D:\\project\\jetbrains-license\\doc\\jetbra\\${fileName}`;
-            } else {
-                const productUpper = productKey ? productKey.toUpperCase() : 'PRODUCT';
-                suggestedPath = `C:\\Users\\${getUserName()}\\AppData\\Roaming\\JetBrains\\${productUpper}2023.3\\${fileName}`;
-            }
+        // 生成jar文件完整路径
+        function generateJarPath(fileName) {
+            // 优先使用项目目录路径
+            const projectPath = `D:\\Personal_projects\\Idea_Activate\\jetbrains-license\\doc\\jetbra\\${fileName}`;
 
-            const message = `已选择文件: ${fileName}\n\n建议的完整路径:\n${suggestedPath}\n\n请将完整路径复制到输入框中，或根据实际情况修改路径。`;
+            // 也可以根据实际情况返回其他常见路径
+            // const downloadPath = `C:\\Users\\${getUserName()}\\Downloads\\${fileName}`;
+            // const customPath = `D:\\tools\\jetbrains\\${fileName}`;
 
-            // 使用更友好的提示方式
-            setTimeout(() => {
-                if (confirm(message + '\n\n点击确定查看更多路径示例')) {
-                    showCommonPaths(type, productKey);
-                } else {
-                    // 用户选择不查看示例，直接填入建议路径
-                    const inputId = type === 'jar' ? 'customJarPath' : `customPathValue_${productKey}`;
-                    const input = document.getElementById(inputId);
-                    if (input && !input.value.includes('\\') && !input.value.includes('/')) {
-                        // 只有当前值是文件名时才替换为完整路径
-                        input.value = suggestedPath;
-                    }
-                }
-            }, 100);
+            return projectPath;
         }
 
-        // 获取用户名（简单实现）
+        // 生成vmoptions文件完整路径
+        function generateVmOptionsPath(fileName, productKey) {
+            // 根据产品类型生成对应的配置目录路径
+            const productUpper = productKey.toUpperCase();
+            const userName = getUserName();
+
+            // JetBrains产品配置目录的常见路径
+            const configPath = `C:\\Users\\${userName}\\AppData\\Roaming\\JetBrains\\${productUpper}2023.3\\${fileName}`;
+
+            // 也可以根据需要返回其他路径，如安装目录下的vmoptions
+            // const installPath = `C:\\Program Files\\JetBrains\\${productUpper} 2023.3\\bin\\${productKey}64.exe.vmoptions`;
+
+            return configPath;
+        }
+
+        // 获取用户名（尝试从环境变量获取，失败则使用默认值）
         function getUserName() {
-            return 'YourName'; // 可以根据需要改进
+            // 在实际环境中，可以尝试从各种来源获取用户名
+            return 'YourName'; // 默认用户名，用户可以手动修改路径
         }
 
-        // 显示常见路径示例
-        function showCommonPaths(type, productKey = null) {
-            let examples = '';
 
-            if (type === 'jar') {
-                examples = `ja-netfilter.jar 常见路径示例:
-
-• 项目目录: D:\\project\\jetbrains-license\\doc\\jetbra\\ja-netfilter.jar
-• 下载目录: C:\\Users\\YourName\\Downloads\\ja-netfilter.jar
-• 自定义目录: D:\\tools\\jetbrains\\ja-netfilter.jar`;
-            } else {
-                const productName = productKey ? productKey.toUpperCase() : 'PRODUCT';
-                examples = `${productName} vmoptions文件常见路径示例:
-
-• Windows: C:\\Users\\YourName\\AppData\\Roaming\\JetBrains\\${productName}2023.3\\${productKey}.vmoptions
-• 安装目录: C:\\Program Files\\JetBrains\\${productName} 2023.3\\bin\\${productKey}64.exe.vmoptions
-• 自定义目录: D:\\JetBrains\\config\\${productKey}.vmoptions`;
-            }
-
-            alert(examples);
-        }
 
         // 强制重置文件输入
         function forceResetFileInput(inputId) {
@@ -449,11 +428,11 @@
 
                         console.log('选择的jar文件:', fileName);
 
-                        // 总是更新输入框显示文件名
-                        pathInput.value = fileName;
+                        // 直接生成并填入完整路径
+                        const fullPath = generateJarPath(fileName);
+                        pathInput.value = fullPath;
 
-                        // 显示提示信息
-                        showPathHint('jar', fileName);
+                        console.log('自动填入jar完整路径:', fullPath);
                     } else {
                         console.log('没有选择文件或文件被清空');
                         document.getElementById('customJarPath').value = '';
@@ -481,11 +460,11 @@
 
                         console.log('选择的vmoptions文件:', fileName, '产品:', productKey);
 
-                        // 总是更新输入框显示文件名
-                        pathInput.value = fileName;
+                        // 直接生成并填入完整路径
+                        const fullPath = generateVmOptionsPath(fileName, productKey);
+                        pathInput.value = fullPath;
 
-                        // 显示提示信息
-                        showPathHint('vmoptions', fileName, productKey);
+                        console.log('自动填入vmoptions完整路径:', fullPath);
                     } else {
                         console.log('没有选择文件或文件被清空，产品:', productKey);
                         pathInput.value = '';
