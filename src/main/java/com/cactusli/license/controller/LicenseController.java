@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -275,5 +278,125 @@ public class LicenseController {
         result.put("jaNetfilterInfo", vmOptionsService.getJaNetfilterInfo());
         result.put("supportedProductsCount", vmOptionsService.getSupportedProducts().size());
         return result;
+    }
+
+    /**
+     * 根据文件名搜索真实的文件路径
+     */
+    @PostMapping("/api/vmoptions/resolve-path")
+    @ResponseBody
+    public Map<String, Object> resolveFilePath(@RequestBody Map<String, String> request) {
+        try {
+            String fileName = request.get("fileName");
+            String fileType = request.get("fileType"); // "jar" 或 "vmoptions"
+            String productKey = request.get("productKey"); // 仅对vmoptions文件需要
+
+            log.info("解析文件路径: fileName={}, fileType={}, productKey={}", fileName, fileType, productKey);
+
+            Map<String, Object> result = new HashMap<>();
+            List<String> possiblePaths = new ArrayList<>();
+            String foundPath = null;
+
+            if ("jar".equals(fileType)) {
+                possiblePaths = findJarFilePaths(fileName);
+            } else if ("vmoptions".equals(fileType)) {
+                possiblePaths = findVmOptionsFilePaths(fileName, productKey);
+            }
+
+            // 查找第一个存在的路径
+            for (String path : possiblePaths) {
+                if (Files.exists(Paths.get(path))) {
+                    foundPath = path;
+                    break;
+                }
+            }
+
+            result.put("success", true);
+            result.put("fileName", fileName);
+            result.put("foundPath", foundPath);
+            result.put("possiblePaths", possiblePaths);
+            result.put("exists", foundPath != null);
+
+            return result;
+
+        } catch (Exception e) {
+            log.error("解析文件路径失败", e);
+            Map<String, Object> result = new HashMap<>();
+            result.put("success", false);
+            result.put("message", "解析文件路径失败: " + e.getMessage());
+            return result;
+        }
+    }
+
+    /**
+     * 查找jar文件的可能路径
+     */
+    private List<String> findJarFilePaths(String fileName) {
+        List<String> paths = new ArrayList<>();
+        String userHome = System.getProperty("user.home");
+        String currentDir = System.getProperty("user.dir");
+
+        // 项目目录
+        paths.add(currentDir + "/doc/jetbra/" + fileName);
+        paths.add(currentDir + "\\doc\\jetbra\\" + fileName);
+
+        // 下载目录
+        paths.add(userHome + "/Downloads/" + fileName);
+        paths.add(userHome + "\\Downloads\\" + fileName);
+
+        // 桌面
+        paths.add(userHome + "/Desktop/" + fileName);
+        paths.add(userHome + "\\Desktop\\" + fileName);
+
+        // 常见工具目录
+        paths.add("D:/tools/jetbrains/" + fileName);
+        paths.add("C:/tools/jetbrains/" + fileName);
+        paths.add("D:/jetbrains/" + fileName);
+        paths.add("C:/jetbrains/" + fileName);
+
+        return paths;
+    }
+
+    /**
+     * 查找vmoptions文件的可能路径
+     */
+    private List<String> findVmOptionsFilePaths(String fileName, String productKey) {
+        List<String> paths = new ArrayList<>();
+        String userHome = System.getProperty("user.home");
+        String productUpper = productKey != null ? productKey.toUpperCase() : "";
+
+        // JetBrains配置目录 (Windows)
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            String appData = System.getenv("APPDATA");
+            if (appData != null) {
+                // 不同版本的配置目录
+                String[] versions = {"2023.3", "2023.2", "2023.1", "2024.1", "2024.2"};
+                for (String version : versions) {
+                    paths.add(appData + "\\JetBrains\\" + productUpper + version + "\\" + fileName);
+                }
+            }
+
+            // 程序安装目录
+            String[] installDirs = {
+                "C:\\Program Files\\JetBrains",
+                "C:\\Program Files (x86)\\JetBrains",
+                "D:\\Program Files\\JetBrains"
+            };
+
+            for (String installDir : installDirs) {
+                paths.add(installDir + "\\" + productUpper + "\\bin\\" + productKey + "64.exe.vmoptions");
+                paths.add(installDir + "\\" + productUpper + " 2023.3\\bin\\" + productKey + "64.exe.vmoptions");
+            }
+        }
+
+        // Linux/Mac配置目录
+        paths.add(userHome + "/.config/JetBrains/" + productUpper + "2023.3/" + fileName);
+        paths.add(userHome + "/Library/Application Support/JetBrains/" + productUpper + "2023.3/" + fileName);
+
+        // 当前目录
+        paths.add(System.getProperty("user.dir") + "/" + fileName);
+        paths.add(System.getProperty("user.dir") + "\\" + fileName);
+
+        return paths;
     }
 }
