@@ -12,7 +12,9 @@
 
 ---
 
-# US English
+</div>
+
+# 🇺🇸 English
 
 <div align="right">
 
