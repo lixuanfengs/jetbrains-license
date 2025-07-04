@@ -98,13 +98,17 @@
                         </label>
                     </div>
                     <div id="customJarPathInput" class="custom-path-input">
-                        <div class="input-group">
+                        <div class="input-group mb-2">
                             <input type="text" class="form-control" id="customJarPath"
-                                   placeholder="选择ja-netfilter.jar文件" readonly>
+                                   placeholder="输入ja-netfilter.jar完整路径">
                             <button class="btn btn-outline-light" type="button" onclick="selectJarFile()">
                                 <i class="fas fa-folder-open me-1"></i>浏览
                             </button>
                         </div>
+                        <small class="text-light">
+                            <i class="fas fa-info-circle me-1"></i>
+                            可以手动输入完整路径，或点击浏览选择文件（需要手动补全路径）
+                        </small>
                         <input type="file" id="jarFileInput" accept=".jar" style="display: none;">
                     </div>
                 </div>
@@ -175,20 +179,23 @@
                                 </label>
                             </div>
                             <div class="custom-path-input" th:id="'customPathInput_' + ${product.key}">
-                                <div class="input-group input-group-sm">
+                                <div class="input-group input-group-sm mb-1">
                                     <input type="text" class="form-control"
                                            th:id="'customPathValue_' + ${product.key}"
-                                           placeholder="选择vmoptions文件"
-                                           readonly
+                                           placeholder="输入vmoptions文件完整路径"
                                            onclick="event.stopPropagation()">
                                     <button class="btn btn-outline-secondary btn-sm" type="button"
-                                            th:onclick="'selectVmOptionsFile(\\'' + ${product.key} + '\\')'"
-                                            onclick="event.stopPropagation()">
+                                            th:data-product="${product.key}"
+                                            onclick="event.stopPropagation(); selectVmOptionsFile(this.dataset.product);">
                                         <i class="fas fa-folder-open"></i>
                                     </button>
                                 </div>
+                                <small class="text-muted d-block">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    可手动输入路径或浏览选择
+                                </small>
                                 <input type="file" th:id="'vmOptionsFileInput_' + ${product.key}"
-                                       accept=".vmoptions" style="display: none;">
+                                       accept=".vmoptions,.txt" style="display: none;">
                             </div>
                         </div>
                     </div>
@@ -242,7 +249,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <h6>产品选择</h6>
                                 <ul class="small">
                                     <li>点击产品卡片进行选择/取消选择</li>
@@ -251,13 +258,22 @@
                                     <li>红色边框表示配置文件不存在</li>
                                 </ul>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <h6>路径配置</h6>
                                 <ul class="small">
                                     <li>可以自定义ja-netfilter.jar路径</li>
                                     <li>可以为每个产品设置自定义vmoptions路径</li>
                                     <li>留空则使用默认路径</li>
                                     <li>支持绝对路径和相对路径</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h6>文件选择</h6>
+                                <ul class="small">
+                                    <li>点击"浏览"按钮选择文件</li>
+                                    <li>选择后需要手动输入完整路径</li>
+                                    <li>浏览器安全限制无法自动获取完整路径</li>
+                                    <li>建议直接输入已知的完整路径</li>
                                 </ul>
                             </div>
                         </div>
@@ -286,39 +302,111 @@
         document.getElementById('jarFileInput').addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
-                document.getElementById('customJarPath').value = file.name;
-                // 在实际应用中，这里应该获取文件的完整路径
-                // 由于浏览器安全限制，我们只能显示文件名
+                const pathInput = document.getElementById('customJarPath');
+                const fileName = file.name;
+
+                // 提示用户输入完整路径
+                const currentValue = pathInput.value;
+                if (!currentValue || currentValue === fileName) {
+                    pathInput.value = fileName;
+                    // 显示提示信息
+                    showPathHint('jar', fileName);
+                }
+                console.log('选择的jar文件:', fileName);
             }
         });
 
         // 选择jar文件
         function selectJarFile() {
-            document.getElementById('jarFileInput').click();
+            const fileInput = document.getElementById('jarFileInput');
+            if (fileInput) {
+                fileInput.click();
+            } else {
+                console.error('找不到jar文件输入元素');
+            }
         }
 
         // 选择vmoptions文件
         function selectVmOptionsFile(productKey) {
-            document.getElementById('vmOptionsFileInput_' + productKey).click();
+            console.log('选择vmoptions文件，产品:', productKey);
+            const fileInput = document.getElementById('vmOptionsFileInput_' + productKey);
+            if (fileInput) {
+                fileInput.click();
+            } else {
+                console.error('找不到vmoptions文件输入元素:', 'vmOptionsFileInput_' + productKey);
+            }
         }
 
-        // 为每个产品的文件输入添加事件监听器
-        document.addEventListener('DOMContentLoaded', function() {
-            const products = ['idea', 'clion', 'phpstorm', 'goland', 'pycharm', 'webstorm',
-                            'webide', 'rider', 'datagrip', 'rubymine', 'appcode', 'dataspell',
-                            'gateway', 'jetbrains_client', 'jetbrainsclient', 'studio', 'devecostudio'];
+        // 初始化文件选择功能
+        function initializeFileSelectors() {
+            // 获取所有产品的文件输入元素
+            const fileInputs = document.querySelectorAll('input[type="file"][id^="vmOptionsFileInput_"]');
 
-            products.forEach(product => {
-                const fileInput = document.getElementById('vmOptionsFileInput_' + product);
-                if (fileInput) {
-                    fileInput.addEventListener('change', function() {
-                        const file = this.files[0];
-                        if (file) {
-                            document.getElementById('customPathValue_' + product).value = file.name;
+            fileInputs.forEach(fileInput => {
+                const productKey = fileInput.id.replace('vmOptionsFileInput_', '');
+
+                fileInput.addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (file) {
+                        const pathInput = document.getElementById('customPathValue_' + productKey);
+                        if (pathInput) {
+                            const fileName = file.name;
+                            const currentValue = pathInput.value;
+
+                            if (!currentValue || currentValue === fileName) {
+                                pathInput.value = fileName;
+                                // 显示提示信息
+                                showPathHint('vmoptions', fileName, productKey);
+                            }
+                            console.log('选择的vmoptions文件:', fileName, '产品:', productKey);
                         }
-                    });
-                }
+                    }
+                });
             });
+
+            console.log('文件选择器初始化完成，找到', fileInputs.length, '个文件输入元素');
+        }
+
+        // 显示路径提示
+        function showPathHint(type, fileName, productKey = null) {
+            const message = type === 'jar'
+                ? `已选择文件: ${fileName}\n\n请在输入框中输入完整路径，例如:\nD:\\path\\to\\${fileName}`
+                : `已选择文件: ${fileName}\n\n请在输入框中输入完整路径，例如:\nC:\\Users\\YourName\\AppData\\Roaming\\JetBrains\\${productKey}\\${fileName}`;
+
+            // 使用更友好的提示方式
+            setTimeout(() => {
+                if (confirm(message + '\n\n点击确定查看常见路径示例')) {
+                    showCommonPaths(type, productKey);
+                }
+            }, 100);
+        }
+
+        // 显示常见路径示例
+        function showCommonPaths(type, productKey = null) {
+            let examples = '';
+
+            if (type === 'jar') {
+                examples = `ja-netfilter.jar 常见路径示例:
+
+• 项目目录: D:\\project\\jetbrains-license\\doc\\jetbra\\ja-netfilter.jar
+• 下载目录: C:\\Users\\YourName\\Downloads\\ja-netfilter.jar
+• 自定义目录: D:\\tools\\jetbrains\\ja-netfilter.jar`;
+            } else {
+                const productName = productKey ? productKey.toUpperCase() : 'PRODUCT';
+                examples = `${productName} vmoptions文件常见路径示例:
+
+• Windows: C:\\Users\\YourName\\AppData\\Roaming\\JetBrains\\${productName}2023.3\\${productKey}.vmoptions
+• 安装目录: C:\\Program Files\\JetBrains\\${productName} 2023.3\\bin\\${productKey}64.exe.vmoptions
+• 自定义目录: D:\\JetBrains\\config\\${productKey}.vmoptions`;
+            }
+
+            alert(examples);
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成，初始化文件选择器');
+            initializeFileSelectors();
         });
         
         // 切换产品选择
