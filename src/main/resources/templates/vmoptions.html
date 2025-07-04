@@ -55,9 +55,19 @@
                 <a class="nav-link" href="/config">
                     <i class="fas fa-cog me-1"></i>配置
                 </a>
-                <a class="nav-link active" href="/vmoptions">
-                    <i class="fas fa-tools me-1"></i>VM选项
-                </a>
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle active" href="#" id="vmOptionsDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-tools me-1"></i>VM选项
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item active" href="/vmoptions">
+                            <i class="fas fa-magic me-1"></i>快速配置
+                        </a></li>
+                        <li><a class="dropdown-item" href="/vmoptions-advanced">
+                            <i class="fas fa-cogs me-1"></i>高级配置
+                        </a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
@@ -97,9 +107,18 @@
         <div class="configure-section text-center" th:if="${isJaNetfilterAvailable}">
             <h3><i class="fas fa-magic me-2"></i>一键配置所有产品</h3>
             <p class="mb-4">点击下方按钮，自动为所有支持的JetBrains产品配置VM选项</p>
-            <button type="button" class="btn btn-light btn-lg" onclick="configureAllProducts()">
-                <i class="fas fa-rocket me-2"></i>开始配置
-            </button>
+            <div class="d-flex justify-content-center gap-3">
+                <button type="button" class="btn btn-light btn-lg" onclick="configureAllProducts()">
+                    <i class="fas fa-rocket me-2"></i>配置所有产品
+                </button>
+                <a href="/vmoptions-advanced" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-cogs me-2"></i>高级配置
+                </a>
+            </div>
+            <p class="mt-3 mb-0 small">
+                <i class="fas fa-info-circle me-1"></i>
+                需要自定义选择产品或路径？请使用 <a href="/vmoptions-advanced" class="text-white"><u>高级配置</u></a>
+            </p>
         </div>
 
         <!-- 警告信息 -->

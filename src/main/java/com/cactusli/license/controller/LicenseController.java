@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -210,6 +211,17 @@ public class LicenseController {
     }
 
     /**
+     * 高级VM选项配置页面
+     */
+    @GetMapping("/vmoptions-advanced")
+    public String vmOptionsAdvancedPage(Model model) {
+        model.addAttribute("supportedProducts", vmOptionsService.getSupportedProducts());
+        model.addAttribute("jaNetfilterInfo", vmOptionsService.getJaNetfilterInfo());
+        model.addAttribute("isJaNetfilterAvailable", vmOptionsService.isJaNetfilterAvailable());
+        return "vmoptions-advanced";
+    }
+
+    /**
      * 配置所有产品的VM选项
      */
     @PostMapping("/api/vmoptions/configure-all")
@@ -217,6 +229,44 @@ public class LicenseController {
     public Map<String, Object> configureAllVmOptions() {
         log.info("开始配置所有产品的VM选项");
         return vmOptionsService.configureAllProducts();
+    }
+
+    /**
+     * 配置选定产品的VM选项
+     */
+    @PostMapping("/api/vmoptions/configure-selected")
+    @ResponseBody
+    public Map<String, Object> configureSelectedVmOptions(@RequestBody Map<String, Object> request) {
+        try {
+            @SuppressWarnings("unchecked")
+            List<String> selectedProducts = (List<String>) request.get("selectedProducts");
+            String customJarPath = (String) request.get("customJarPath");
+            @SuppressWarnings("unchecked")
+            Map<String, String> customVmOptionsMap = (Map<String, String>) request.get("customVmOptionsMap");
+
+            log.info("开始配置选定产品的VM选项: {}", selectedProducts);
+
+            if (selectedProducts == null || selectedProducts.isEmpty()) {
+                Map<String, Object> result = new HashMap<>();
+                result.put("success", false);
+                result.put("message", "请至少选择一个产品");
+                return result;
+            }
+
+            if (customVmOptionsMap != null && !customVmOptionsMap.isEmpty()) {
+                return vmOptionsService.configureSelectedProductsWithCustomPaths(
+                    selectedProducts, customJarPath, customVmOptionsMap);
+            } else {
+                return vmOptionsService.configureSelectedProducts(selectedProducts, customJarPath);
+            }
+
+        } catch (Exception e) {
+            log.error("配置选定产品VM选项失败", e);
+            Map<String, Object> result = new HashMap<>();
+            result.put("success", false);
+            result.put("message", "配置失败: " + e.getMessage());
+            return result;
+        }
     }
 
     /**

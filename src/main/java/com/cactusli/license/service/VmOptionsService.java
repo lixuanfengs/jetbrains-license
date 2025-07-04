@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * VM选项配置服务
@@ -34,23 +35,50 @@ public class VmOptionsService {
      * 配置所有JetBrains产品的vmoptions
      */
     public Map<String, Object> configureAllProducts() {
+        return configureSelectedProducts(Arrays.asList(JETBRAINS_PRODUCTS), null);
+    }
+
+    /**
+     * 配置选定的JetBrains产品的vmoptions
+     *
+     * @param selectedProducts 选定的产品列表
+     * @param customJarPath 自定义jar路径，为null时使用默认路径
+     */
+    public Map<String, Object> configureSelectedProducts(List<String> selectedProducts, String customJarPath) {
         Map<String, Object> result = new HashMap<>();
         List<String> successProducts = new ArrayList<>();
         List<String> failedProducts = new ArrayList<>();
-        
+
         try {
             // 获取ja-netfilter.jar的路径
-            Path jarPath = getJaNetfilterJarPath();
+            Path jarPath;
+            if (customJarPath != null && !customJarPath.trim().isEmpty()) {
+                jarPath = Paths.get(customJarPath.trim());
+            } else {
+                jarPath = getJaNetfilterJarPath();
+            }
+
             if (!Files.exists(jarPath)) {
                 result.put("success", false);
                 result.put("message", "ja-netfilter.jar 文件不存在: " + jarPath);
                 return result;
             }
-            
-            // 为每个产品配置vmoptions
-            for (String product : JETBRAINS_PRODUCTS) {
+
+            // 验证选定的产品
+            List<String> validProducts = selectedProducts.stream()
+                .filter(product -> Arrays.asList(JETBRAINS_PRODUCTS).contains(product))
+                .collect(Collectors.toList());
+
+            if (validProducts.isEmpty()) {
+                result.put("success", false);
+                result.put("message", "没有选择有效的产品");
+                return result;
+            }
+
+            // 为每个选定的产品配置vmoptions
+            for (String product : validProducts) {
                 try {
-                    if (configureProduct(product, jarPath)) {
+                    if (configureProduct(product, jarPath, null)) {
                         successProducts.add(product);
                         log.info("成功配置产品: {}", product);
                     } else {
@@ -62,52 +90,138 @@ public class VmOptionsService {
                     log.error("配置产品异常: {}", product, e);
                 }
             }
-            
+
             result.put("success", true);
-            result.put("message", String.format("配置完成！成功: %d, 失败: %d", 
+            result.put("message", String.format("配置完成！成功: %d, 失败: %d",
                 successProducts.size(), failedProducts.size()));
             result.put("successProducts", successProducts);
             result.put("failedProducts", failedProducts);
             result.put("jarPath", jarPath.toString());
-            
+            result.put("selectedCount", validProducts.size());
+
         } catch (Exception e) {
             log.error("配置vmoptions失败", e);
             result.put("success", false);
             result.put("message", "配置失败: " + e.getMessage());
         }
-        
+
+        return result;
+    }
+
+    /**
+     * 配置选定产品的vmoptions，支持自定义vmoptions文件路径
+     *
+     * @param selectedProducts 选定的产品列表
+     * @param customJarPath 自定义jar路径
+     * @param customVmOptionsMap 自定义vmoptions文件路径映射 (产品名 -> vmoptions文件路径)
+     */
+    public Map<String, Object> configureSelectedProductsWithCustomPaths(
+            List<String> selectedProducts,
+            String customJarPath,
+            Map<String, String> customVmOptionsMap) {
+
+        Map<String, Object> result = new HashMap<>();
+        List<String> successProducts = new ArrayList<>();
+        List<String> failedProducts = new ArrayList<>();
+
+        try {
+            // 获取ja-netfilter.jar的路径
+            Path jarPath;
+            if (customJarPath != null && !customJarPath.trim().isEmpty()) {
+                jarPath = Paths.get(customJarPath.trim());
+            } else {
+                jarPath = getJaNetfilterJarPath();
+            }
+
+            if (!Files.exists(jarPath)) {
+                result.put("success", false);
+                result.put("message", "ja-netfilter.jar 文件不存在: " + jarPath);
+                return result;
+            }
+
+            // 验证选定的产品
+            List<String> validProducts = selectedProducts.stream()
+                .filter(product -> Arrays.asList(JETBRAINS_PRODUCTS).contains(product))
+                .collect(Collectors.toList());
+
+            if (validProducts.isEmpty()) {
+                result.put("success", false);
+                result.put("message", "没有选择有效的产品");
+                return result;
+            }
+
+            // 为每个选定的产品配置vmoptions
+            for (String product : validProducts) {
+                try {
+                    String customVmOptionsPath = customVmOptionsMap != null ?
+                        customVmOptionsMap.get(product) : null;
+
+                    if (configureProduct(product, jarPath, customVmOptionsPath)) {
+                        successProducts.add(product);
+                        log.info("成功配置产品: {} (路径: {})", product,
+                            customVmOptionsPath != null ? customVmOptionsPath : "默认");
+                    } else {
+                        failedProducts.add(product);
+                        log.warn("配置产品失败: {}", product);
+                    }
+                } catch (Exception e) {
+                    failedProducts.add(product);
+                    log.error("配置产品异常: {}", product, e);
+                }
+            }
+
+            result.put("success", true);
+            result.put("message", String.format("配置完成！成功: %d, 失败: %d",
+                successProducts.size(), failedProducts.size()));
+            result.put("successProducts", successProducts);
+            result.put("failedProducts", failedProducts);
+            result.put("jarPath", jarPath.toString());
+            result.put("selectedCount", validProducts.size());
+
+        } catch (Exception e) {
+            log.error("配置vmoptions失败", e);
+            result.put("success", false);
+            result.put("message", "配置失败: " + e.getMessage());
+        }
+
         return result;
     }
     
     /**
      * 配置单个产品的vmoptions
      */
-    private boolean configureProduct(String product, Path jarPath) throws IOException {
-        Path vmOptionsFile = getVmOptionsPath(product);
-        
+    private boolean configureProduct(String product, Path jarPath, String customVmOptionsPath) throws IOException {
+        Path vmOptionsFile;
+
+        if (customVmOptionsPath != null && !customVmOptionsPath.trim().isEmpty()) {
+            vmOptionsFile = Paths.get(customVmOptionsPath.trim());
+        } else {
+            vmOptionsFile = getVmOptionsPath(product);
+        }
+
         if (!Files.exists(vmOptionsFile)) {
             log.warn("vmoptions文件不存在: {}", vmOptionsFile);
             return false;
         }
-        
+
         // 读取现有内容
         List<String> lines = Files.readAllLines(vmOptionsFile);
         List<String> newLines = new ArrayList<>();
-        
+
         // 移除已存在的javaagent配置
         for (String line : lines) {
             if (!JAVAAGENT_PATTERN.matcher(line.trim()).matches()) {
                 newLines.add(line);
             }
         }
-        
+
         // 添加新的javaagent配置
         String javaagentLine = "-javaagent:" + jarPath.toString() + "=jetbrains";
         newLines.add(javaagentLine);
-        
+
         // 写入文件
         Files.write(vmOptionsFile, newLines, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        
+
         return true;
     }
     
