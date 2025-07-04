@@ -14,7 +14,7 @@
 
 </div>
 
-# 🇺🇸 English
+# US English
 
 <div align="right">
 
