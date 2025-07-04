@@ -24,6 +24,7 @@ JetBrains License Generator 是一个基于 Spring Boot 3.x 的现代化许可�
 - 📱 **移动端友好** - 响应式设计，支持移动设备访问
 - 🔒 **参数验证** - 完整的输入验证和错误处理
 - 📊 **实时反馈** - Ajax 异步操作，实时显示生成结果
+- 🛠️ **VM选项配置** - 一键配置JetBrains产品的VM选项，自动添加ja-netfilter.jar代理
 
 ### 🎯 支持的产品
 
@@ -92,6 +93,18 @@ mvn spring-boot:run
    - 返回首页 http://localhost:8081
    - 点击"生成许可证"按钮
    - 复制生成的许可证代码
+
+4. **配置VM选项** ⭐ **重要步骤**
+   - 访问 http://localhost:8081/vmoptions
+   - 确保 `doc/jetbra/ja-netfilter.jar` 文件存在
+   - 点击"开始配置"按钮，自动配置所有JetBrains产品
+   - 等待配置完成
+
+5. **激活JetBrains产品**
+   - 重启对应的JetBrains IDE
+   - 在激活界面选择"许可证服务器"或"激活码"
+   - 输入生成的许可证代码
+   - 完成激活
 
 ### 命令行方式（兼容旧版本）
 
