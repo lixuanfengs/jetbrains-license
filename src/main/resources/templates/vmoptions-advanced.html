@@ -298,87 +298,99 @@
             }
         });
 
-        // jar文件选择
-        document.getElementById('jarFileInput').addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const pathInput = document.getElementById('customJarPath');
-                const fileName = file.name;
-
-                // 提示用户输入完整路径
-                const currentValue = pathInput.value;
-                if (!currentValue || currentValue === fileName) {
-                    pathInput.value = fileName;
-                    // 显示提示信息
-                    showPathHint('jar', fileName);
-                }
-                console.log('选择的jar文件:', fileName);
-            }
-        });
+        // 初始化jar文件选择事件（页面加载时调用一次）
+        function initJarFileSelector() {
+            bindJarFileEvent();
+        }
 
         // 选择jar文件
         function selectJarFile() {
-            const fileInput = document.getElementById('jarFileInput');
-            if (fileInput) {
-                fileInput.click();
-            } else {
-                console.error('找不到jar文件输入元素');
-            }
+            console.log('准备选择jar文件');
+
+            // 强制重置文件输入，确保每次都能触发change事件
+            forceResetFileInput('jarFileInput');
+
+            // 稍微延迟后点击，确保重置完成
+            setTimeout(() => {
+                const fileInput = document.getElementById('jarFileInput');
+                if (fileInput) {
+                    console.log('点击jar文件选择器');
+                    fileInput.click();
+                } else {
+                    console.error('找不到jar文件输入元素');
+                }
+            }, 50);
         }
 
         // 选择vmoptions文件
         function selectVmOptionsFile(productKey) {
-            console.log('选择vmoptions文件，产品:', productKey);
-            const fileInput = document.getElementById('vmOptionsFileInput_' + productKey);
-            if (fileInput) {
-                fileInput.click();
-            } else {
-                console.error('找不到vmoptions文件输入元素:', 'vmOptionsFileInput_' + productKey);
-            }
+            console.log('准备选择vmoptions文件，产品:', productKey);
+
+            const inputId = 'vmOptionsFileInput_' + productKey;
+
+            // 强制重置文件输入，确保每次都能触发change事件
+            forceResetFileInput(inputId);
+
+            // 稍微延迟后点击，确保重置完成
+            setTimeout(() => {
+                const fileInput = document.getElementById(inputId);
+                if (fileInput) {
+                    console.log('点击vmoptions文件选择器，产品:', productKey);
+                    fileInput.click();
+                } else {
+                    console.error('找不到vmoptions文件输入元素:', inputId);
+                }
+            }, 50);
         }
 
         // 初始化文件选择功能
         function initializeFileSelectors() {
-            // 获取所有产品的文件输入元素
+            // 初始化jar文件选择器
+            initJarFileSelector();
+
+            // 获取所有产品的文件输入元素并初始化
             const fileInputs = document.querySelectorAll('input[type="file"][id^="vmOptionsFileInput_"]');
 
             fileInputs.forEach(fileInput => {
                 const productKey = fileInput.id.replace('vmOptionsFileInput_', '');
-
-                fileInput.addEventListener('change', function() {
-                    const file = this.files[0];
-                    if (file) {
-                        const pathInput = document.getElementById('customPathValue_' + productKey);
-                        if (pathInput) {
-                            const fileName = file.name;
-                            const currentValue = pathInput.value;
-
-                            if (!currentValue || currentValue === fileName) {
-                                pathInput.value = fileName;
-                                // 显示提示信息
-                                showPathHint('vmoptions', fileName, productKey);
-                            }
-                            console.log('选择的vmoptions文件:', fileName, '产品:', productKey);
-                        }
-                    }
-                });
+                bindVmOptionsFileEvent(productKey);
             });
 
-            console.log('文件选择器初始化完成，找到', fileInputs.length, '个文件输入元素');
+            console.log('文件选择器初始化完成，找到', fileInputs.length, '个vmoptions文件输入元素');
         }
 
         // 显示路径提示
         function showPathHint(type, fileName, productKey = null) {
-            const message = type === 'jar'
-                ? `已选择文件: ${fileName}\n\n请在输入框中输入完整路径，例如:\nD:\\path\\to\\${fileName}`
-                : `已选择文件: ${fileName}\n\n请在输入框中输入完整路径，例如:\nC:\\Users\\YourName\\AppData\\Roaming\\JetBrains\\${productKey}\\${fileName}`;
+            // 生成建议的完整路径
+            let suggestedPath = '';
+            if (type === 'jar') {
+                suggestedPath = `D:\\project\\jetbrains-license\\doc\\jetbra\\${fileName}`;
+            } else {
+                const productUpper = productKey ? productKey.toUpperCase() : 'PRODUCT';
+                suggestedPath = `C:\\Users\\${getUserName()}\\AppData\\Roaming\\JetBrains\\${productUpper}2023.3\\${fileName}`;
+            }
+
+            const message = `已选择文件: ${fileName}\n\n建议的完整路径:\n${suggestedPath}\n\n请将完整路径复制到输入框中，或根据实际情况修改路径。`;
 
             // 使用更友好的提示方式
             setTimeout(() => {
-                if (confirm(message + '\n\n点击确定查看常见路径示例')) {
+                if (confirm(message + '\n\n点击确定查看更多路径示例')) {
                     showCommonPaths(type, productKey);
+                } else {
+                    // 用户选择不查看示例，直接填入建议路径
+                    const inputId = type === 'jar' ? 'customJarPath' : `customPathValue_${productKey}`;
+                    const input = document.getElementById(inputId);
+                    if (input && !input.value.includes('\\') && !input.value.includes('/')) {
+                        // 只有当前值是文件名时才替换为完整路径
+                        input.value = suggestedPath;
+                    }
                 }
             }, 100);
+        }
+
+        // 获取用户名（简单实现）
+        function getUserName() {
+            return 'YourName'; // 可以根据需要改进
         }
 
         // 显示常见路径示例
@@ -401,6 +413,85 @@
             }
 
             alert(examples);
+        }
+
+        // 强制重置文件输入
+        function forceResetFileInput(inputId) {
+            const input = document.getElementById(inputId);
+            if (input) {
+                // 创建新的文件输入元素替换旧的
+                const newInput = input.cloneNode(true);
+                input.parentNode.replaceChild(newInput, input);
+
+                // 重新绑定事件
+                if (inputId === 'jarFileInput') {
+                    bindJarFileEvent();
+                } else if (inputId.startsWith('vmOptionsFileInput_')) {
+                    const productKey = inputId.replace('vmOptionsFileInput_', '');
+                    bindVmOptionsFileEvent(productKey);
+                }
+
+                console.log('强制重置文件输入:', inputId);
+            }
+        }
+
+        // 绑定jar文件事件
+        function bindJarFileEvent() {
+            const jarInput = document.getElementById('jarFileInput');
+            if (jarInput) {
+                jarInput.addEventListener('change', function() {
+                    console.log('jar文件选择事件触发，文件数量:', this.files.length);
+
+                    if (this.files.length > 0) {
+                        const file = this.files[0];
+                        const pathInput = document.getElementById('customJarPath');
+                        const fileName = file.name;
+
+                        console.log('选择的jar文件:', fileName);
+
+                        // 总是更新输入框显示文件名
+                        pathInput.value = fileName;
+
+                        // 显示提示信息
+                        showPathHint('jar', fileName);
+                    } else {
+                        console.log('没有选择文件或文件被清空');
+                        document.getElementById('customJarPath').value = '';
+                    }
+                });
+            }
+        }
+
+        // 绑定vmoptions文件事件
+        function bindVmOptionsFileEvent(productKey) {
+            const fileInput = document.getElementById('vmOptionsFileInput_' + productKey);
+            if (fileInput) {
+                fileInput.addEventListener('change', function() {
+                    console.log('vmoptions文件选择事件触发，产品:', productKey, '文件数量:', this.files.length);
+
+                    const pathInput = document.getElementById('customPathValue_' + productKey);
+                    if (!pathInput) {
+                        console.error('找不到路径输入框:', 'customPathValue_' + productKey);
+                        return;
+                    }
+
+                    if (this.files.length > 0) {
+                        const file = this.files[0];
+                        const fileName = file.name;
+
+                        console.log('选择的vmoptions文件:', fileName, '产品:', productKey);
+
+                        // 总是更新输入框显示文件名
+                        pathInput.value = fileName;
+
+                        // 显示提示信息
+                        showPathHint('vmoptions', fileName, productKey);
+                    } else {
+                        console.log('没有选择文件或文件被清空，产品:', productKey);
+                        pathInput.value = '';
+                    }
+                });
+            }
         }
 
         // 页面加载完成后初始化
