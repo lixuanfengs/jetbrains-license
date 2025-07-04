@@ -12,36 +12,7 @@
 
 ---
 
-## 🌐 Choose Language / 选择语言
-
-<table align="center">
-<tr>
-<td align="center" width="50%">
-<a href="#-english">
-<img src="https://img.shields.io/badge/English-🇺🇸-blue?style=for-the-badge&logoWidth=20" alt="English"/>
-<br><br>
-<b>📖 Complete English Documentation</b>
-<br>
-<sub>Modern license generation tool for JetBrains products</sub>
-</a>
-</td>
-<td align="center" width="50%">
-<a href="#-中文文档">
-<img src="https://img.shields.io/badge/中文-🇨🇳-red?style=for-the-badge&logoWidth=20" alt="中文"/>
-<br><br>
-<b>📖 完整中文文档</b>
-<br>
-<sub>现代化的 JetBrains 产品许可证生成工具</sub>
-</a>
-</td>
-</tr>
-</table>
-
----
-
-</div>
-
-# 🇺🇸 English
+# US English
 
 <div align="right">
 
