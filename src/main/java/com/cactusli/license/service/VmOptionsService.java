@@ -32,90 +32,13 @@ public class VmOptionsService {
     );
     
     /**
-     * 配置所有JetBrains产品的vmoptions
-     */
-    public Map<String, Object> configureAllProducts() {
-        return configureSelectedProducts(Arrays.asList(JETBRAINS_PRODUCTS), null);
-    }
-
-    /**
-     * 配置选定的JetBrains产品的vmoptions
+     * 统一的VM选项配置方法
      *
-     * @param selectedProducts 选定的产品列表
+     * @param selectedProducts 选定的产品列表，为空时配置所有产品
      * @param customJarPath 自定义jar路径，为null时使用默认路径
-     */
-    public Map<String, Object> configureSelectedProducts(List<String> selectedProducts, String customJarPath) {
-        Map<String, Object> result = new HashMap<>();
-        List<String> successProducts = new ArrayList<>();
-        List<String> failedProducts = new ArrayList<>();
-
-        try {
-            // 获取ja-netfilter.jar的路径
-            Path jarPath;
-            if (customJarPath != null && !customJarPath.trim().isEmpty()) {
-                jarPath = Paths.get(customJarPath.trim());
-            } else {
-                jarPath = getJaNetfilterJarPath();
-            }
-
-            if (!Files.exists(jarPath)) {
-                result.put("success", false);
-                result.put("message", "ja-netfilter.jar 文件不存在: " + jarPath);
-                return result;
-            }
-
-            // 验证选定的产品
-            List<String> validProducts = selectedProducts.stream()
-                .filter(product -> Arrays.asList(JETBRAINS_PRODUCTS).contains(product))
-                .collect(Collectors.toList());
-
-            if (validProducts.isEmpty()) {
-                result.put("success", false);
-                result.put("message", "没有选择有效的产品");
-                return result;
-            }
-
-            // 为每个选定的产品配置vmoptions
-            for (String product : validProducts) {
-                try {
-                    if (configureProduct(product, jarPath, null)) {
-                        successProducts.add(product);
-                        log.info("成功配置产品: {}", product);
-                    } else {
-                        failedProducts.add(product);
-                        log.warn("配置产品失败: {}", product);
-                    }
-                } catch (Exception e) {
-                    failedProducts.add(product);
-                    log.error("配置产品异常: {}", product, e);
-                }
-            }
-
-            result.put("success", true);
-            result.put("message", String.format("配置完成！成功: %d, 失败: %d",
-                successProducts.size(), failedProducts.size()));
-            result.put("successProducts", successProducts);
-            result.put("failedProducts", failedProducts);
-            result.put("jarPath", jarPath.toString());
-            result.put("selectedCount", validProducts.size());
-
-        } catch (Exception e) {
-            log.error("配置vmoptions失败", e);
-            result.put("success", false);
-            result.put("message", "配置失败: " + e.getMessage());
-        }
-
-        return result;
-    }
-
-    /**
-     * 配置选定产品的vmoptions，支持自定义vmoptions文件路径
-     *
-     * @param selectedProducts 选定的产品列表
-     * @param customJarPath 自定义jar路径
      * @param customVmOptionsMap 自定义vmoptions文件路径映射 (产品名 -> vmoptions文件路径)
      */
-    public Map<String, Object> configureSelectedProductsWithCustomPaths(
+    public Map<String, Object> configureProducts(
             List<String> selectedProducts,
             String customJarPath,
             Map<String, String> customVmOptionsMap) {
@@ -139,27 +62,34 @@ public class VmOptionsService {
                 return result;
             }
 
-            // 验证选定的产品
-            List<String> validProducts = selectedProducts.stream()
-                .filter(product -> Arrays.asList(JETBRAINS_PRODUCTS).contains(product))
-                .collect(Collectors.toList());
+            // 确定要配置的产品列表
+            List<String> productsToConfig;
+            if (selectedProducts == null || selectedProducts.isEmpty()) {
+                // 如果没有选择产品，配置所有产品
+                productsToConfig = Arrays.asList(JETBRAINS_PRODUCTS);
+            } else {
+                // 验证选定的产品
+                productsToConfig = selectedProducts.stream()
+                    .filter(product -> Arrays.asList(JETBRAINS_PRODUCTS).contains(product))
+                    .collect(Collectors.toList());
+            }
 
-            if (validProducts.isEmpty()) {
+            if (productsToConfig.isEmpty()) {
                 result.put("success", false);
                 result.put("message", "没有选择有效的产品");
                 return result;
             }
 
-            // 为每个选定的产品配置vmoptions
-            for (String product : validProducts) {
+            // 为每个产品配置vmoptions
+            for (String product : productsToConfig) {
                 try {
                     String customVmOptionsPath = customVmOptionsMap != null ?
                         customVmOptionsMap.get(product) : null;
 
                     if (configureProduct(product, jarPath, customVmOptionsPath)) {
                         successProducts.add(product);
-                        log.info("成功配置产品: {} (路径: {})", product,
-                            customVmOptionsPath != null ? customVmOptionsPath : "默认");
+                        log.info("成功配置产品: {} (jar: {}, vmoptions: {})",
+                            product, jarPath, customVmOptionsPath != null ? customVmOptionsPath : "默认");
                     } else {
                         failedProducts.add(product);
                         log.warn("配置产品失败: {}", product);
@@ -176,7 +106,8 @@ public class VmOptionsService {
             result.put("successProducts", successProducts);
             result.put("failedProducts", failedProducts);
             result.put("jarPath", jarPath.toString());
-            result.put("selectedCount", validProducts.size());
+            result.put("totalProducts", productsToConfig.size());
+            result.put("selectedCount", selectedProducts != null ? selectedProducts.size() : productsToConfig.size());
 
         } catch (Exception e) {
             log.error("配置vmoptions失败", e);
@@ -185,6 +116,13 @@ public class VmOptionsService {
         }
 
         return result;
+    }
+
+    /**
+     * 配置所有JetBrains产品的vmoptions（向下兼容）
+     */
+    public Map<String, Object> configureAllProducts() {
+        return configureProducts(null, null, null);
     }
     
     /**

@@ -116,6 +116,103 @@ mvn clean package -DskipTests
 java -cp target/jetbrains-license-1.0.1.jar com.cactusli.license.JetbrainsLicense
 ```
 
+## 🛠️ VM选项配置详解
+
+### 🎯 功能概述
+
+VM选项配置是JetBrains License Generator的核心功能，用于自动配置JetBrains产品的VM选项，添加ja-netfilter.jar代理，这是激活JetBrains产品的**关键步骤**。
+
+### ✅ 支持的产品
+
+| 产品 | 说明 | 产品 | 说明 |
+|------|------|------|------|
+| **IntelliJ IDEA** | Java开发IDE | **WebStorm** | JavaScript开发IDE |
+| **PyCharm** | Python开发IDE | **GoLand** | Go开发IDE |
+| **CLion** | C/C++开发IDE | **PhpStorm** | PHP开发IDE |
+| **Rider** | .NET开发IDE | **DataGrip** | 数据库工具 |
+| **RubyMine** | Ruby开发IDE | **AppCode** | iOS开发IDE |
+| **DataSpell** | 数据科学IDE | **Gateway** | 远程开发工具 |
+| **JetBrains Client** | 客户端工具 | **Android Studio** | Android开发IDE |
+| **DevEco Studio** | 华为开发IDE | | |
+
+### 🚀 核心功能
+
+1. **🔍 自动检测** - 检测ja-netfilter.jar文件是否存在
+2. **⚡ 灵活配置** - 支持配置所有产品或选择特定产品
+3. **📁 路径自定义** - 支持自定义jar路径和vmoptions文件路径
+4. **🔄 智能处理** - 自动移除旧配置，添加新配置
+5. **📊 状态显示** - 实时显示配置结果和产品状态
+6. **🛡️ 错误处理** - 详细的错误信息和处理建议
+
+### 📋 详细使用步骤
+
+#### 1. 准备工作
+- 确保 `doc/jetbra/ja-netfilter.jar` 文件存在于项目目录中
+- 启动应用：`java -jar target/jetbrains-license-1.0.1.jar --server.port=8081`
+
+#### 2. 访问配置页面
+```
+http://localhost:8081/vmoptions
+```
+
+#### 3. 配置选项
+
+**🔧 基础配置**
+- **配置所有产品**: 点击"配置所有产品"按钮，一键配置所有支持的JetBrains产品
+- **选择性配置**: 点击产品卡片选择需要配置的产品，然后点击"配置选定产品"
+
+**📁 高级配置**
+- **自定义jar路径**: 勾选"使用自定义jar路径"，点击"浏览"选择ja-netfilter.jar文件
+- **自定义vmoptions路径**: 在产品卡片中勾选"自定义路径"，选择对应的vmoptions文件
+
+#### 4. 执行配置
+1. 根据需要选择配置方式
+2. 点击对应的配置按钮
+3. 等待配置完成，查看结果
+
+#### 5. 完成激活
+1. **重启IDE**: 配置完成后重启对应的JetBrains IDE
+2. **使用许可证**: 在IDE中使用生成的许可证进行激活
+
+### 🔧 技术原理
+
+#### 配置过程
+1. **文件检测**: 检查 `doc/jetbra/ja-netfilter.jar` 是否存在
+2. **vmoptions定位**: 找到各产品的vmoptions文件
+3. **内容处理**:
+   - 读取现有vmoptions内容
+   - 移除旧的javaagent配置（避免重复）
+   - 添加新的javaagent配置
+4. **文件写入**: 将更新后的内容写入vmoptions文件
+
+#### 添加的配置
+```
+-javaagent:D:\path\to\doc\jetbra\ja-netfilter.jar=jetbrains
+```
+
+### 🌐 API接口
+
+| 接口 | 方法 | 说明 |
+|------|------|------|
+| `/api/vmoptions/status` | GET | 获取状态信息 |
+| `/api/vmoptions/products` | GET | 获取产品列表 |
+| `/api/vmoptions/configure` | POST | 统一配置接口 |
+| `/api/vmoptions/configure-all` | POST | 配置所有产品（兼容） |
+
+### ⚠️ 注意事项
+
+#### 重要提醒
+1. **文件权限**: 确保应用有读写vmoptions文件的权限
+2. **IDE重启**: 配置完成后必须重启对应的IDE
+3. **路径正确**: ja-netfilter.jar必须位于正确的路径
+4. **备份建议**: 建议在配置前备份原始vmoptions文件
+
+#### 故障排除
+1. **文件不存在**: 检查ja-netfilter.jar路径是否正确
+2. **权限不足**: 以管理员身份运行应用
+3. **配置失败**: 检查vmoptions文件是否存在且可写
+4. **IDE无法启动**: 检查vmoptions文件语法是否正确
+
 ## ⚙️ 配置说明
 
 ### 应用配置文件

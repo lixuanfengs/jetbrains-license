@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>高级VM选项配置 - JetBrains License Generator</title>
+    <title>VM选项配置 - JetBrains License Generator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -69,11 +69,8 @@
                 <a class="nav-link" href="/config">
                     <i class="fas fa-cog me-1"></i>配置
                 </a>
-                <a class="nav-link" href="/vmoptions">
+                <a class="nav-link active" href="/vmoptions">
                     <i class="fas fa-tools me-1"></i>VM选项
-                </a>
-                <a class="nav-link active" href="/vmoptions-advanced">
-                    <i class="fas fa-cogs me-1"></i>高级配置
                 </a>
             </div>
         </div>
@@ -83,8 +80,8 @@
         <!-- 页面标题 -->
         <div class="row mb-4">
             <div class="col-12">
-                <h2><i class="fas fa-cogs text-primary me-2"></i>高级VM选项配置</h2>
-                <p class="text-muted">自定义选择产品和配置路径，灵活配置JetBrains产品的VM选项</p>
+                <h2><i class="fas fa-cogs text-primary me-2"></i>VM选项配置</h2>
+                <p class="text-muted">选择需要配置的产品和自定义路径，灵活配置JetBrains产品的VM选项</p>
             </div>
         </div>
 
@@ -101,8 +98,14 @@
                         </label>
                     </div>
                     <div id="customJarPathInput" class="custom-path-input">
-                        <input type="text" class="form-control" id="customJarPath" 
-                               placeholder="输入ja-netfilter.jar的完整路径">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="customJarPath"
+                                   placeholder="选择ja-netfilter.jar文件" readonly>
+                            <button class="btn btn-outline-light" type="button" onclick="selectJarFile()">
+                                <i class="fas fa-folder-open me-1"></i>浏览
+                            </button>
+                        </div>
+                        <input type="file" id="jarFileInput" accept=".jar" style="display: none;">
                     </div>
                 </div>
                 <div class="col-md-4 text-end">
@@ -164,7 +167,7 @@
                         <!-- 自定义路径选项 -->
                         <div class="mt-2">
                             <div class="form-check">
-                                <input class="form-check-input custom-path-checkbox" type="checkbox" 
+                                <input class="form-check-input custom-path-checkbox" type="checkbox"
                                        th:id="'customPath_' + ${product.key}"
                                        onclick="event.stopPropagation(); toggleCustomPath(this)">
                                 <label class="form-check-label small" th:for="'customPath_' + ${product.key}">
@@ -172,10 +175,20 @@
                                 </label>
                             </div>
                             <div class="custom-path-input" th:id="'customPathInput_' + ${product.key}">
-                                <input type="text" class="form-control form-control-sm" 
-                                       th:id="'customPathValue_' + ${product.key}"
-                                       placeholder="vmoptions文件路径"
-                                       onclick="event.stopPropagation()">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control"
+                                           th:id="'customPathValue_' + ${product.key}"
+                                           placeholder="选择vmoptions文件"
+                                           readonly
+                                           onclick="event.stopPropagation()">
+                                    <button class="btn btn-outline-secondary btn-sm" type="button"
+                                            th:onclick="'selectVmOptionsFile(\\'' + ${product.key} + '\\')'"
+                                            onclick="event.stopPropagation()">
+                                        <i class="fas fa-folder-open"></i>
+                                    </button>
+                                </div>
+                                <input type="file" th:id="'vmOptionsFileInput_' + ${product.key}"
+                                       accept=".vmoptions" style="display: none;">
                             </div>
                         </div>
                     </div>
@@ -200,8 +213,11 @@
 
         <!-- 配置按钮 -->
         <div class="text-center mb-4">
-            <button type="button" class="btn btn-primary btn-lg" onclick="configureSelectedProducts()" id="configureBtn" disabled>
-                <i class="fas fa-rocket me-2"></i>开始配置选定产品
+            <button type="button" class="btn btn-primary btn-lg me-3" onclick="configureAllProducts()" id="configureAllBtn">
+                <i class="fas fa-magic me-2"></i>配置所有产品
+            </button>
+            <button type="button" class="btn btn-success btn-lg" onclick="configureSelectedProducts()" id="configureSelectedBtn" disabled>
+                <i class="fas fa-rocket me-2"></i>配置选定产品
             </button>
         </div>
 
@@ -264,6 +280,45 @@
                 input.classList.remove('show');
                 document.getElementById('customJarPath').value = '';
             }
+        });
+
+        // jar文件选择
+        document.getElementById('jarFileInput').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                document.getElementById('customJarPath').value = file.name;
+                // 在实际应用中，这里应该获取文件的完整路径
+                // 由于浏览器安全限制，我们只能显示文件名
+            }
+        });
+
+        // 选择jar文件
+        function selectJarFile() {
+            document.getElementById('jarFileInput').click();
+        }
+
+        // 选择vmoptions文件
+        function selectVmOptionsFile(productKey) {
+            document.getElementById('vmOptionsFileInput_' + productKey).click();
+        }
+
+        // 为每个产品的文件输入添加事件监听器
+        document.addEventListener('DOMContentLoaded', function() {
+            const products = ['idea', 'clion', 'phpstorm', 'goland', 'pycharm', 'webstorm',
+                            'webide', 'rider', 'datagrip', 'rubymine', 'appcode', 'dataspell',
+                            'gateway', 'jetbrains_client', 'jetbrainsclient', 'studio', 'devecostudio'];
+
+            products.forEach(product => {
+                const fileInput = document.getElementById('vmOptionsFileInput_' + product);
+                if (fileInput) {
+                    fileInput.addEventListener('change', function() {
+                        const file = this.files[0];
+                        if (file) {
+                            document.getElementById('customPathValue_' + product).value = file.name;
+                        }
+                    });
+                }
+            });
         });
         
         // 切换产品选择
@@ -338,7 +393,7 @@
         function updateSelectionSummary() {
             const selectedCount = selectedProducts.size;
             document.getElementById('selectedCount').textContent = selectedCount;
-            document.getElementById('configureBtn').disabled = selectedCount === 0;
+            document.getElementById('configureSelectedBtn').disabled = selectedCount === 0;
             
             // 更新选择的产品列表
             if (selectedCount > 0) {
@@ -368,39 +423,64 @@
                 document.getElementById('customPathsList').textContent = '未设置自定义路径';
             }
         }
-        
+
+        // 配置所有产品
+        function configureAllProducts() {
+            const button = document.getElementById('configureAllBtn');
+            const originalText = button.innerHTML;
+
+            // 显示加载状态
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>配置中...';
+
+            // 准备请求数据
+            const requestData = {
+                selectedProducts: [], // 空数组表示配置所有产品
+                customJarPath: document.getElementById('useCustomJarPath').checked ?
+                    getJarFilePath() : null,
+                customVmOptionsMap: {}
+            };
+
+            executeConfiguration(requestData, button, originalText);
+        }
+
         // 配置选定产品
         function configureSelectedProducts() {
             if (selectedProducts.size === 0) {
                 alert('请至少选择一个产品');
                 return;
             }
-            
-            const button = document.getElementById('configureBtn');
+
+            const button = document.getElementById('configureSelectedBtn');
             const originalText = button.innerHTML;
-            
+
             // 显示加载状态
             button.disabled = true;
             button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>配置中...';
-            
+
             // 准备请求数据
             const requestData = {
                 selectedProducts: Array.from(selectedProducts),
-                customJarPath: document.getElementById('useCustomJarPath').checked ? 
-                    document.getElementById('customJarPath').value : null,
+                customJarPath: document.getElementById('useCustomJarPath').checked ?
+                    getJarFilePath() : null,
                 customVmOptionsMap: {}
             };
-            
+
             // 收集自定义vmoptions路径
             document.querySelectorAll('.custom-path-checkbox:checked').forEach(checkbox => {
                 const productKey = checkbox.id.replace('customPath_', '');
-                const pathValue = document.getElementById('customPathValue_' + productKey).value.trim();
+                const pathValue = getVmOptionsFilePath(productKey);
                 if (pathValue) {
                     requestData.customVmOptionsMap[productKey] = pathValue;
                 }
             });
-            
-            fetch('/api/vmoptions/configure-selected', {
+
+            executeConfiguration(requestData, button, originalText);
+        }
+
+        // 执行配置请求
+        function executeConfiguration(requestData, button, originalText) {
+            fetch('/api/vmoptions/configure', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -423,6 +503,18 @@
                 button.disabled = false;
                 button.innerHTML = originalText;
             });
+        }
+
+        // 获取jar文件路径
+        function getJarFilePath() {
+            const jarInput = document.getElementById('customJarPath');
+            return jarInput.value.trim() || null;
+        }
+
+        // 获取vmoptions文件路径
+        function getVmOptionsFilePath(productKey) {
+            const pathInput = document.getElementById('customPathValue_' + productKey);
+            return pathInput.value.trim() || null;
         }
         
         // 显示配置结果
