@@ -119,16 +119,24 @@
                         </h5>
                     </div>
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row" th:if="${config != null}">
                             <div class="col-md-6">
-                                <p><strong>证书持有者:</strong> <span th:text="${config.licenseeName}"></span></p>
-                                <p><strong>产品类型:</strong> <span th:text="${config.productType}"></span></p>
-                                <p><strong>有效期:</strong> <span th:text="${config.licenseYears}"></span> 年</p>
+                                <p><strong>证书持有者:</strong> <span th:text="${config.licenseeName ?: '未设置'}"></span></p>
+                                <p><strong>产品类型:</strong> <span th:text="${config.productType ?: '未设置'}"></span></p>
+                                <p><strong>有效期:</strong> <span th:text="${config.licenseYears ?: 0}"></span> 年</p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>证书颁发者:</strong> <span th:text="${config.issuerName}"></span></p>
-                                <p><strong>证书主题:</strong> <span th:text="${config.subjectName}"></span></p>
-                                <p><strong>产品代码:</strong> <span th:text="${#strings.arrayJoin(config.productCodes, ', ')}"></span></p>
+                                <p><strong>证书颁发者:</strong> <span th:text="${config.issuerName ?: '未设置'}"></span></p>
+                                <p><strong>证书主题:</strong> <span th:text="${config.subjectName ?: '未设置'}"></span></p>
+                                <p><strong>产品代码:</strong> <span th:text="${config.productCodes != null ? #strings.arrayJoin(config.productCodes, ', ') : '未设置'}"></span></p>
+                            </div>
+                        </div>
+                        <div class="row" th:if="${config == null}">
+                            <div class="col-12">
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    配置信息加载失败，请检查应用配置。
+                                </div>
                             </div>
                         </div>
                         <div class="text-end">

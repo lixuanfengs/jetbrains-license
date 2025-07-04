@@ -36,9 +36,18 @@ public class LicenseController {
      */
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("config", licenseService.getCurrentConfig());
-        model.addAttribute("productTypes", getProductTypes());
-        return "index";
+        try {
+            LicenseConfig config = licenseService.getCurrentConfig();
+            model.addAttribute("config", config);
+            model.addAttribute("productTypes", getProductTypes());
+            return "index";
+        } catch (Exception e) {
+            log.error("首页加载失败", e);
+            model.addAttribute("config", null);
+            model.addAttribute("productTypes", getProductTypes());
+            model.addAttribute("error", "配置加载失败: " + e.getMessage());
+            return "index";
+        }
     }
     
     /**
