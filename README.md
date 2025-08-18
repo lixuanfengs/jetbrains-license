@@ -1,4 +1,4 @@
-# JetBrains License Generator v2.0.0
+# 🚀 JetBrains License Generator v2.0.0
 
 <div align="center">
 
@@ -7,63 +7,105 @@
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.1-green.svg)
 ![Maven](https://img.shields.io/badge/Maven-3.6+-orange.svg)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.0+-06B6D4.svg)
+![Version](https://img.shields.io/badge/Version-2.0.0-brightgreen.svg)
 
 **⚠️ For Educational Use Only - 仅供学习交流使用 ⚠️**
+
+*A modern, web-based JetBrains license generator with automated VM configuration*
 
 ---
 
 </div>
 
-# US English
+## 🌟 What's New in v2.0.0
 
-<div align="right">
+- 🎨 **Modern UI with Tailwind CSS** - Beautiful, responsive design
+- 🛠️ **Automated VM Configuration** - One-click setup for all JetBrains IDEs
+- 🌐 **Web-Based Interface** - No more command-line complexity
+- ⚡ **Real-time Generation** - Instant license creation with Ajax
+- 📱 **Mobile Responsive** - Works perfectly on all devices
+- 🔧 **Spring Boot 3.x** - Built with the latest technology stack
 
-**[🔝 Back to Top](#jetbrains-license-generator-v200)** | **[🇨🇳 中文文档](#-中文文档)**
-
-</div>
+---
 
 ## 📑 Table of Contents
 
+### English Documentation
 - [🚀 Quick Start](#-quick-start)
 - [📋 Project Overview](#-project-overview)
 - [🎯 Supported Products](#-supported-products)
-- [🚀 Quick Start Guide](#-quick-start-1)
-- [🎮 Usage](#-usage)
+- [🎮 Usage Guide](#-usage-guide)
 - [🛠️ VM Options Configuration](#️-vm-options-configuration)
 - [⚙️ Configuration](#️-configuration)
 - [🔧 Activation Methods](#-activation-methods)
 - [📁 Project Structure](#-project-structure)
-- [🌟 Version Features](#-version-features)
 - [🛠️ Tech Stack](#️-tech-stack)
 - [🔍 API Reference](#-api-reference)
 - [⚠️ Important Notes](#️-important-notes)
 
+### 中文文档
+- [🚀 快速开始](#-快速开始)
+- [📋 项目简介](#-项目简介)
+- [🎯 支持的产品](#-支持的产品)
+- [🎮 使用方法](#-使用方法)
+- [🛠️ VM选项配置详解](#️-vm选项配置详解)
+- [⚙️ 配置说明](#️-配置说明)
+- [🔧 激活方法](#-激活方法)
+
+---
+
 ## 🚀 Quick Start
 
-| Step | Command | Description |
-|------|---------|-------------|
-| 1️⃣ | `git clone <repo-url>` | Clone the project |
-| 2️⃣ | `mvn clean package -DskipTests` | Build the project |
-| 3️⃣ | `java -jar target/jetbrains-license-1.0.1.jar` | Run the application |
-| 4️⃣ | Visit `http://localhost:8080` | Access web interface |
-| 5️⃣ | Configure at `/config` | Set up parameters |
-| 6️⃣ | Generate license at homepage | Create license |
-| 7️⃣ | Configure VM options at `/vmoptions` | Setup JetBrains IDEs |
+### ⚡ One-Minute Setup
+
+```bash
+# 1. Clone and build
+git clone https://github.com/your-repo/jetbrains-license.git
+cd jetbrains-license
+mvn clean package -DskipTests
+
+# 2. Run the application
+java -jar target/jetbrains-license-1.0.1.jar
+
+# 3. Open your browser
+# Visit: http://localhost:8080
+```
+
+### 📋 Step-by-Step Guide
+
+| Step | Action | Description |
+|------|--------|-------------|
+| 1️⃣ | **Clone & Build** | `mvn clean package -DskipTests` |
+| 2️⃣ | **Start Application** | `java -jar target/jetbrains-license-1.0.1.jar` |
+| 3️⃣ | **Open Web Interface** | Visit `http://localhost:8080` |
+| 4️⃣ | **Configure Parameters** | Go to `/config` page |
+| 5️⃣ | **Generate License** | Click "Generate License" on homepage |
+| 6️⃣ | **Setup VM Options** | Visit `/vmoptions` for automated setup |
+| 7️⃣ | **Activate JetBrains** | Use generated license in your IDE |
 
 ## 📋 Project Overview
 
-JetBrains License Generator is a modern license generation tool based on Spring Boot 3.x, supporting dynamic configuration and generation of licenses for JetBrains products through a web interface.
+**JetBrains License Generator** is a cutting-edge, web-based license generation tool built with Spring Boot 3.x. It provides an intuitive interface for generating and managing JetBrains product licenses with automated VM configuration capabilities.
+
+### 🎯 What This Tool Does
+
+This application simplifies the process of:
+- **Generating licenses** for all JetBrains IDEs (IDEA, WebStorm, PyCharm, etc.)
+- **Automatically configuring** VM options for JetBrains products
+- **Managing certificates** and license parameters through a web interface
+- **Providing real-time feedback** during the license generation process
 
 ### ✨ Key Features
 
-- 🌐 **Modern Web Interface** - Responsive design with Tailwind CSS
-- ⚙️ **Dynamic Configuration** - Support for runtime parameter adjustment via web interface or config files
-- 🎯 **Multi-Product Support** - Support for IDEA, WebStorm, PyCharm, GoLand, and all JetBrains products
-- 🔧 **Spring Boot 3.x** - Built with the latest Spring Boot framework
-- 📱 **Mobile Friendly** - Responsive design supporting mobile devices
-- 🔒 **Parameter Validation** - Complete input validation and error handling
-- 📊 **Real-time Feedback** - Ajax asynchronous operations with real-time results
-- 🛠️ **VM Options Configuration** - One-click configuration of JetBrains VM options with automatic ja-netfilter.jar agent setup
+- 🌐 **Modern Web Interface** - Beautiful, responsive design with Tailwind CSS
+- 🛠️ **Automated VM Setup** - One-click configuration for all JetBrains IDEs
+- ⚙️ **Dynamic Configuration** - Runtime parameter adjustment via web interface
+- 🎯 **Universal Support** - Works with all JetBrains products (IDEA, WebStorm, PyCharm, GoLand, etc.)
+- 🔧 **Spring Boot 3.x** - Built with the latest enterprise-grade framework
+- 📱 **Mobile Responsive** - Perfect experience on desktop, tablet, and mobile
+- 🔒 **Input Validation** - Comprehensive validation and error handling
+- 📊 **Real-time Feedback** - Ajax-powered instant results
+- 🚀 **High Performance** - Optimized for speed and reliability
 
 ### 🎯 Supported Products
 
@@ -114,81 +156,112 @@ JetBrains License Generator is a modern license generation tool based on Spring 
 </tr>
 </table>
 
-## 🚀 Quick Start
+## 🚀 Installation & Setup
 
-### Requirements
+### 📋 Prerequisites
 
-- Java 17 or higher
-- Maven 3.6 or higher
-- Operating System: Windows, macOS, Linux
+| Requirement | Version | Purpose |
+|-------------|---------|---------|
+| **Java** | 17+ | Runtime environment |
+| **Maven** | 3.6+ | Build tool |
+| **OS** | Windows/macOS/Linux | Cross-platform support |
+| **Browser** | Modern browser | Web interface access |
 
-### Installation
+### 🛠️ Installation Steps
 
-1. **Clone the project**
+#### Method 1: Quick Start (Recommended)
+
 ```bash
+# Clone the repository
 git clone https://github.com/your-repo/jetbrains-license.git
 cd jetbrains-license
+
+# Build and run in one command
+mvn clean package -DskipTests && java -jar target/jetbrains-license-1.0.1.jar
 ```
 
-2. **Build the project**
+#### Method 2: Step by Step
+
 ```bash
+# 1. Clone the project
+git clone https://github.com/your-repo/jetbrains-license.git
+cd jetbrains-license
+
+# 2. Build the project
 mvn clean package -DskipTests
-```
 
-3. **Run the application**
-```bash
-# Method 1: Run Spring Boot application directly
+# 3. Run the application
 java -jar target/jetbrains-license-1.0.1.jar
 
-# Method 2: Run with Maven
+# 4. Alternative: Run with Maven
 mvn spring-boot:run
 ```
 
-4. **Access the web interface**
-```
-Open browser and visit: http://localhost:8080
-```
-
-## 🎮 Usage
-
-### Web Interface (Recommended)
-
-1. **Start the application**
-   ```bash
-   java -jar target/jetbrains-license-1.0.1.jar --server.port=8080
-   ```
-
-2. **Configure parameters**
-   - Visit http://localhost:8080/config
-   - Set certificate holder name, validity period, and other parameters
-   - Select target product type
-
-3. **Generate license**
-   - Return to homepage http://localhost:8080
-   - Click "Generate License" button
-   - Copy the generated license code
-
-4. **Configure VM Options** ⭐ **Important Step**
-   - Visit http://localhost:8080/vmoptions
-   - Ensure `doc/jetbra/ja-netfilter.jar` file exists
-   - Click "Start Configuration" to automatically configure all JetBrains products
-   - Wait for configuration completion
-
-5. **Activate JetBrains products**
-   - Restart the corresponding JetBrains IDE
-   - Select "License Server" or "Activation Code" in the activation interface
-   - Enter the generated license code
-   - Complete activation
-
-### Command Line (Legacy Support)
+#### Method 3: Using Batch Script (Windows)
 
 ```bash
-# Build project
+# Simply run the provided batch file
+start.bat
+```
+
+### 🌐 Access the Application
+
+Once started, open your browser and visit:
+```
+http://localhost:8080
+```
+
+The application will be ready to use immediately!
+
+## 🎮 Usage Guide
+
+### 🌐 Web Interface (Recommended)
+
+The modern web interface provides the easiest way to generate licenses and configure your JetBrains IDEs.
+
+#### Step 1: Start the Application
+```bash
+java -jar target/jetbrains-license-1.0.1.jar
+```
+
+#### Step 2: Configure License Parameters
+1. Open your browser and visit: `http://localhost:8080/config`
+2. Set your preferences:
+   - **Certificate Holder Name**: Your name or organization
+   - **License Validity**: Duration in years (default: 10 years)
+   - **Product Type**: Select your target JetBrains product
+   - **Other Parameters**: Issuer name, subject name, etc.
+
+#### Step 3: Generate License
+1. Return to the homepage: `http://localhost:8080`
+2. Click the **"Generate License"** button
+3. Copy the generated license code (it will appear instantly)
+
+#### Step 4: Configure VM Options ⭐ **Critical Step**
+1. Visit: `http://localhost:8080/vmoptions`
+2. Ensure the `doc/jetbra/ja-netfilter.jar` file exists
+3. Click **"Configure All Products"** for automatic setup
+4. Wait for the configuration to complete
+
+#### Step 5: Activate Your JetBrains IDE
+1. **Restart** your JetBrains IDE (IDEA, WebStorm, PyCharm, etc.)
+2. In the activation dialog, select **"License Server"** or **"Activation Code"**
+3. **Paste** the generated license code
+4. Click **"Activate"** to complete the process
+
+### 💻 Command Line (Legacy Support)
+
+For users who prefer command-line interface:
+
+```bash
+# Build the project
 mvn clean package -DskipTests
 
-# Run traditional way
+# Run in legacy mode
 java -cp target/jetbrains-license-1.0.1.jar com.cactusli.license.JetbrainsLicense
 ```
+
+> **Note**: The web interface is recommended for better user experience and additional features.
 
 ## 🛠️ VM Options Configuration
 
@@ -324,18 +397,68 @@ jetbrains-license/
 └── pom.xml                                     # Maven Configuration
 ```
 
-## 🌟 Version Features
+## 🌟 What's New in v2.0.0
 
-### v2.0.0 Updates
+### 🎨 Major UI Overhaul
+- **Tailwind CSS Integration** - Migrated from Bootstrap to modern Tailwind CSS
+- **Glass Morphism Design** - Beautiful frosted glass effects and gradients
+- **Smooth Animations** - Enhanced user experience with fluid transitions
+- **Mobile-First Design** - Optimized for all device sizes
 
-- ✅ **Upgraded to Spring Boot 3.x** - Using latest Spring Boot framework
-- ✅ **Modern Web Interface** - Brand new responsive design with Tailwind CSS
-- ✅ **Dynamic Configuration Management** - Support runtime parameter modification
-- ✅ **Multi-Product Quick Switch** - One-click switch between different JetBrains products
-- ✅ **Parameter Validation** - Complete input validation and error prompts
-- ✅ **Real-time Generation** - Ajax asynchronous generation without page refresh
-- ✅ **Mobile Support** - Responsive design supporting phones and tablets
-- ✅ **Backward Compatibility** - Maintains support for legacy command-line methods
+### 🚀 Enhanced Functionality
+- **Spring Boot 3.x Upgrade** - Latest enterprise-grade framework
+- **Automated VM Configuration** - One-click setup for all JetBrains products
+- **Real-time License Generation** - Instant results with Ajax technology
+- **Dynamic Parameter Management** - Runtime configuration without restarts
+- **Multi-Product Support** - Quick switching between different JetBrains IDEs
+
+### 🛠️ Technical Improvements
+- **Performance Optimization** - Faster loading and response times
+- **Enhanced Validation** - Comprehensive input validation and error handling
+- **Improved Error Messages** - Clear, actionable feedback for users
+- **Better Code Structure** - Cleaner, more maintainable codebase
+- **Backward Compatibility** - Legacy command-line support maintained
+
+## 🛠️ Tech Stack
+
+### Backend Technologies
+- **Spring Boot 3.2.1** - Enterprise-grade Java framework
+- **Spring Web MVC** - RESTful API and web controllers
+- **Thymeleaf** - Server-side template engine
+- **Maven** - Project build and dependency management
+- **Java 17** - Latest LTS version with modern features
+- **BouncyCastle** - Cryptographic operations for certificate generation
+- **Hutool** - Utility library for common operations
+
+### Frontend Technologies
+- **Tailwind CSS 3.0+** - Modern utility-first CSS framework
+- **JavaScript ES6+** - Modern JavaScript features
+- **Font Awesome 6.4** - Comprehensive icon library
+- **jQuery 3.6** - JavaScript library for Ajax operations
+- **Responsive Design** - Mobile-first approach
+
+### Key Dependencies
+```xml
+<!-- Core Spring Boot -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<!-- Cryptography -->
+<dependency>
+    <groupId>org.bouncycastle</groupId>
+    <artifactId>bcpkix-jdk18on</artifactId>
+    <version>1.74</version>
+</dependency>
+
+<!-- Utilities -->
+<dependency>
+    <groupId>cn.hutool</groupId>
+    <artifactId>hutool-all</artifactId>
+    <version>5.8.25</version>
+</dependency>
+```
 
 ## 🔍 API Reference
 
@@ -366,37 +489,94 @@ curl -X POST http://localhost:8080/generate
 
 ## ⚠️ Important Notes
 
-1. **Educational Use Only** - This tool is for learning and research purposes only, not for commercial use
-2. **Certificate Path** - Ensure certificate storage path has read/write permissions
-3. **Java Version** - Requires Java 17 or higher
-4. **Network Environment** - Some features may require network connection
-5. **Security Reminder** - Use in secure environment, avoid leaking sensitive information
+### 🚨 Legal & Ethical Use
+- **Educational Purpose Only** - This tool is strictly for learning and research
+- **No Commercial Use** - Commercial usage is prohibited
+- **User Responsibility** - Users are responsible for any consequences
 
-## 📄 License
+### 🔧 Technical Requirements
+- **Java 17+** - Ensure you have the correct Java version
+- **File Permissions** - Certificate storage path needs read/write access
+- **Network Access** - Some features may require internet connection
+- **Security** - Use in secure environments only
 
-This project is for educational and learning purposes only. Commercial use is prohibited. Users are responsible for any consequences arising from the use of this tool.
+### 💡 Best Practices
+- **Backup Configuration** - Save your settings before making changes
+- **Test Environment** - Try in a test environment first
+- **Keep Updated** - Use the latest version for best experience
+
+## 📄 License & Disclaimer
+
+```
+⚠️  EDUCATIONAL USE ONLY ⚠️
+
+This project is provided for educational and learning purposes only.
+Commercial use is strictly prohibited.
+
+Users are solely responsible for any consequences arising from the use of this tool.
+The authors and contributors assume no liability for any damages or legal issues.
+
+By using this software, you acknowledge that you understand and agree to these terms.
+```
 
 ## 🤝 Contributing
 
-Issues and Pull Requests are welcome to improve this project.
+We welcome contributions to improve this project!
 
-## 📞 Contact
+### How to Contribute
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
 
-- Author: CactusLi
-- Version: v2.0.0
-- Updated: 2024-12-02
+### Contribution Guidelines
+- Follow existing code style
+- Add tests for new features
+- Update documentation as needed
+- Ensure all tests pass
+
+## 📞 Contact & Support
+
+<div align="center">
+
+| 📋 Information | 📝 Details |
+|----------------|------------|
+| 👨‍💻 **Author** | CactusLi |
+| 🏷️ **Version** | v2.0.0 |
+| 📅 **Last Updated** | 2025-01-04 |
+| 🎨 **UI Framework** | Tailwind CSS |
+| ⚡ **Backend** | Spring Boot 3.2.1 |
+
+</div>
 
 ---
 
-**⚠️ Reminder: This tool is for educational use only!**
+<div align="center">
+
+**⚠️ IMPORTANT REMINDER ⚠️**
+
+**This tool is for educational use only!**
+
+**本工具仅供学习交流使用！**
+
+</div>
 
 ---
 
 # 🇨🇳 中文文档
 
+<div align="center">
+
+**简体中文文档 | Simplified Chinese Documentation**
+
+*现代化的 JetBrains 许可证生成器，基于 Spring Boot 3.x 开发*
+
+</div>
+
 <div align="right">
 
-**[🔝 返回顶部](#jetbrains-license-generator-v200)** | **[🇺🇸 English](#-english)**
+**[🔝 返回顶部](#-jetbrains-license-generator-v200)** | **[🇺🇸 English Documentation](#-quick-start)**
 
 </div>
 
@@ -418,32 +598,56 @@ Issues and Pull Requests are welcome to improve this project.
 
 ## 🚀 快速开始
 
-| 步骤 | 命令 | 说明 |
+### ⚡ 一分钟快速部署
+
+```bash
+# 1. 克隆并构建项目
+git clone https://github.com/your-repo/jetbrains-license.git
+cd jetbrains-license
+mvn clean package -DskipTests
+
+# 2. 启动应用程序
+java -jar target/jetbrains-license-1.0.1.jar
+
+# 3. 打开浏览器访问
+# 地址: http://localhost:8080
+```
+
+### 📋 详细步骤指南
+
+| 步骤 | 操作 | 说明 |
 |------|------|------|
-| 1️⃣ | `git clone <repo-url>` | 克隆项目 |
-| 2️⃣ | `mvn clean package -DskipTests` | 编译项目 |
-| 3️⃣ | `java -jar target/jetbrains-license-1.0.1.jar` | 运行应用 |
-| 4️⃣ | 访问 `http://localhost:8080` | 打开Web界面 |
-| 5️⃣ | 在 `/config` 页面配置参数 | 设置许可证参数 |
-| 6️⃣ | 在首页生成许可证 | 创建许可证 |
-| 7️⃣ | 在 `/vmoptions` 配置VM选项 | 配置JetBrains IDE |
+| 1️⃣ | **克隆并构建** | `mvn clean package -DskipTests` |
+| 2️⃣ | **启动应用** | `java -jar target/jetbrains-license-1.0.1.jar` |
+| 3️⃣ | **打开Web界面** | 访问 `http://localhost:8080` |
+| 4️⃣ | **配置参数** | 进入 `/config` 页面设置 |
+| 5️⃣ | **生成许可证** | 在首页点击"生成许可证" |
+| 6️⃣ | **配置VM选项** | 访问 `/vmoptions` 自动配置 |
+| 7️⃣ | **激活JetBrains** | 在IDE中使用生成的许可证 |
 
 ## 📋 项目简介
 
-JetBrains License Generator 是一个基于 Spring Boot 3.x 的现代化许可证生成工具，支持通过 Web 界面动态配置和生成 JetBrains 系列产品的许可证。
+**JetBrains License Generator** 是一个基于 Spring Boot 3.x 开发的现代化许可证生成工具，提供直观的 Web 界面用于生成和管理 JetBrains 产品许可证，并具备自动化 VM 配置功能。
+
+### 🎯 项目功能
+
+本应用程序简化了以下流程：
+- **生成许可证** - 为所有 JetBrains IDE（IDEA、WebStorm、PyCharm 等）生成许可证
+- **自动配置VM选项** - 一键配置 JetBrains 产品的 VM 选项
+- **证书管理** - 通过 Web 界面管理证书和许可证参数
+- **实时反馈** - 在许可证生成过程中提供实时反馈
 
 ### ✨ 主要特性
 
-- 🌐 **现代化 Web 界面** - 基于 Tailwind CSS 的响应式设计，美观现代
-- ⚙️ **动态配置管理** - 支持通过 Web 界面或配置文件动态调整参数
-- 🎯 **多产品支持** - 支持 IDEA、WebStorm、PyCharm、GoLand 等全系列产品
-- 🔧 **Spring Boot 3.x** - 采用最新的 Spring Boot 框架
-- 📱 **移动端友好** - 响应式设计，完美支持移动设备访问
-- 🔒 **参数验证** - 完整的输入验证和错误处理
-- 📊 **实时反馈** - Ajax 异步操作，实时显示生成结果
-- 🛠️ **VM选项配置** - 一键配置JetBrains产品的VM选项，自动添加ja-netfilter.jar代理
-- 🎨 **现代化UI** - 使用 Tailwind CSS 打造的现代化用户界面
-- 🌙 **深色模式支持** - 支持深色模式，保护用户视力
+- 🌐 **现代化 Web 界面** - 基于 Tailwind CSS 的精美响应式设计
+- 🛠️ **自动化VM配置** - 一键配置所有 JetBrains IDE
+- ⚙️ **动态配置管理** - 通过 Web 界面实时调整参数
+- 🎯 **全产品支持** - 支持所有 JetBrains 产品（IDEA、WebStorm、PyCharm、GoLand 等）
+- 🔧 **Spring Boot 3.x** - 基于最新的企业级框架构建
+- 📱 **移动端响应式** - 在桌面、平板和手机上都有完美体验
+- 🔒 **输入验证** - 全面的验证和错误处理机制
+- 📊 **实时反馈** - Ajax 驱动的即时结果显示
+- 🚀 **高性能** - 针对速度和可靠性进行优化
 
 ### 🎯 支持的产品
 
@@ -871,7 +1075,7 @@ curl -X POST http://localhost:8080/generate
    ```bash
    # 构建镜像
    docker build -t jetbrains-license:2.0.0 .
-
+   
    # 运行容器
    docker run -p 8080:8080 jetbrains-license:2.0.0
    ```
@@ -892,58 +1096,43 @@ curl -X POST http://localhost:8080/generate
 
 欢迎提交 Issue 和 Pull Request 来改进这个项目。
 
-## 📞 联系方式
+---
 
 <div align="center">
+<div align="center">
 
-| 信息 | 详情 |
-|------|------|
-| 👨‍💻 **作者** | CactusLi |
-| 🏷️ **版本** | v2.0.0 |
-| 📅 **更新时间** | 2025-01-04 |
-| 🎨 **UI框架** | Tailwind CSS |
+| 📋 项目信息 | 📝 详细内容 |
+|-------------|-------------|
+| 👨‍💻 **开发者** | CactusLi |
+| 🏷️ **当前版本** | v2.0.0 |
+| 📅 **最后更新** | 2025-01-04 |
+| 🎨 **前端框架** | Tailwind CSS 3.0+ |
 | ⚡ **后端框架** | Spring Boot 3.2.1 |
+| 🔗 **项目地址** | [GitHub Repository](#) |
 
 </div>
 
-## 🌟 更新日志
-
-### v2.0.0 (2025-01-04)
-- 🎨 **全面重构UI** - 从Bootstrap迁移到Tailwind CSS
-- 🌈 **现代化设计** - 添加渐变背景、玻璃态效果、动画过渡
-- 📱 **移动端优化** - 改进响应式设计和移动端体验
-- 🔧 **VM配置优化** - 简化vmoptions文件路径输入流程
-- ⚡ **性能提升** - 优化页面加载速度和交互响应
-- 🛠️ **代码重构** - 移除Bootstrap依赖，使用更轻量的Tailwind CSS
-
-### v1.0.1 (2024-12-02)
-- 🚀 **Spring Boot 3.x升级** - 升级到最新的Spring Boot框架
-- 🌐 **Web界面重构** - 全新的Web管理界面
-- 🔧 **VM选项配置** - 新增自动化VM选项配置功能
-
 ---
+
+## ⚠️ 重要声明
 
 <div align="center">
 
-**⚠️ 重要提醒 Important Reminder ⚠️**
+**🚨 EDUCATIONAL USE ONLY 🚨**
 
-**🇨🇳 本工具仅供学习交流使用，请勿用于其他用途！**
+**本工具仅供学习交流使用，请勿用于商业用途！**
 
-**🇺🇸 This tool is for educational use only!**
+**This tool is for educational purposes only!**
 
 ---
 
-## 🔗 Quick Navigation / 快速导航
+### 🔗 快速导航 | Quick Navigation
 
-<div align="center">
-
-| English | 中文 | Links |
-|---------|------|-------|
-| [🔝 Back to Top](#jetbrains-license-generator-v200) | [🔝 返回顶部](#jetbrains-license-generator-v200) | [🌐 Web Interface](http://localhost:8080) |
-| [📖 English Docs](#-english) | [📖 中文文档](#-中文文档) | [⚙️ Configuration](http://localhost:8080/config) |
-| [🚀 Quick Start](#-quick-start) | [🚀 快速开始](#-快速开始) | [🛠️ VM Options](http://localhost:8080/vmoptions) |
-
-</div>
+| 🇺🇸 English | 🇨🇳 中文 | 🔗 链接 |
+|-------------|---------|-------|
+| [📖 English Docs](#-quick-start) | [📖 中文文档](#-快速开始) | [🌐 Web Interface](http://localhost:8080) |
+| [🚀 Quick Start](#-quick-start) | [🚀 快速开始](#-快速开始) | [⚙️ Configuration](http://localhost:8080/config) |
+| [🛠️ Tech Stack](#️-tech-stack) | [🛠️ 技术栈](#️-技术栈) | [🔧 VM Options](http://localhost:8080/vmoptions) |
 
 ---
 
