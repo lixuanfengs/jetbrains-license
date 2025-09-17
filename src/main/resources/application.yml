@@ -54,13 +54,8 @@ jetbrains:
 # 日志配置
 logging:
   level:
-    com.cactusli.license: DEBUG
-    org.springframework.web: info
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-  file:
-    name: logs/jetbrains-license.log
+    root: info
+  config: classpath:logback-spring.xml
 
 # 管理端点配置
 management:

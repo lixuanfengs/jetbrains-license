@@ -75,3 +75,6 @@ src/main/resources/cert/*.pem
 # Docker
 .dockerignore
 
+# data
+data/
+
